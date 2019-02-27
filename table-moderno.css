@@ -1,0 +1,199 @@
+/*
+	Author: Anselm Joseph
+	GitHub: github.com/an23lm
+	Email: anselmjosephs@gmail.com
+	License: GNU v3.0
+*/
+
+.moderno-table-wrapper {
+	position: relative;
+	width: 40vw;
+	height: 40vh;
+	margin-top: 5vh;
+	margin-left: 5vw;
+	background-color: transparent;
+	overflow: scroll;
+}
+
+.moderno-table {
+	min-width: 100%;
+	height: 100%;
+}
+
+.moderno-table-body {
+	position: relative;
+}
+
+.moderno-table-row {
+	display: inline-flex;
+}
+
+.moderno-table-item {
+	padding: 4pt 8pt;
+	height: auto;
+	overflow: visible;
+	overflow-wrap: break-word;
+}
+
+/*
+.moderno-table-header .moderno-table-row:first-child .moderno-table-item:nth-child(odd) {
+	background-color: #8b9dc3;
+}
+
+.moderno-table-header .moderno-table-row:first-child .moderno-table-item:nth-child(even) {
+	background-color: #d3d3d3;
+}
+*/
+
+.moderno-table-header .moderno-table-row:first-child .moderno-table-item {
+	background-color: #d3d3d3;
+	border-bottom: 1px #939393;
+	border-top: 1px #939393;
+	border-style: solid;
+}
+
+.moderno-table-body .moderno-table-row:nth-child(even) .moderno-table-item {
+	background-color: #ffffff;
+}
+
+.moderno-table-body .moderno-table-row:nth-child(odd) .moderno-table-item {
+	background-color: #f3f3f3;
+}
+
+/* scroll bar */
+.moderno-table-wrapper.show-scroll-bar::scrollbar {
+	appearance: none;
+}
+
+.moderno-table-wrapper.show-scroll-bar::scrollbar:vertical {
+    width: 11px;
+}
+
+.moderno-table-wrapper.show-scroll-bar::scrollbar:horizontal {
+    height: 11px;
+}
+
+.moderno-table-wrapper.show-scroll-bar::scrollbar-thumb {
+    border-radius: 8px;
+    border: 2px solid white;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.moderno-table-wrapper.show-scroll-bar::-moz-scrollbar {
+	-moz-appearance: none;
+}
+
+.moderno-table-wrapper.show-scroll-bar::-moz-scrollbar:vertical {
+    width: 11px;
+}
+
+.moderno-table-wrapper.show-scroll-bar::-moz-scrollbar:horizontal {
+    height: 11px;
+}
+
+.moderno-table-wrapper.show-scroll-bar::-moz-scrollbar-thumb {
+    border-radius: 8px;
+    border: 2px solid white;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.moderno-table-wrapper.show-scroll-bar::-webkit-scrollbar {
+    -webkit-appearance: none;
+}
+
+.moderno-table-wrapper.show-scroll-bar::-webkit-scrollbar:vertical {
+    width: 11px;
+}
+
+.moderno-table-wrapper.show-scroll-bar::-webkit-scrollbar:horizontal {
+    height: 11px;
+}
+
+.moderno-table-wrapper.show-scroll-bar::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    border: 2px solid white;
+    background-color: rgba(0,0,0,0.5);
+}
+/* end scroll bar */
+
+
+.moderno-table-item {
+	border: 0px;
+	border-right: 1px #939393;
+	border-style: solid;
+}
+
+.moderno-table-row .moderno-table-item:first-child {
+	border-left: 1px #939393;
+	border-style: solid;
+}
+
+.moderno-table-body .moderno-table-row:last-child .moderno-table-item {
+	border-bottom: 1px #939393;
+	border-style: solid;
+}
+
+.moderno-table .moderno-table-row .moderno-table-item:first-child {
+	position: sticky;
+	position: -webkit-sticky;
+  	position: -moz-sticky;
+  	position: -ms-sticky;
+  	position: -o-sticky;
+
+	left: 0;
+	top: 0;
+	right: 0;
+	z-index: 994;
+}
+
+.moderno-table-header {
+	position: sticky;
+	position: -webkit-sticky;
+  	position: -moz-sticky;
+  	position: -ms-sticky;
+  	position: -o-sticky;
+
+	left: 0;
+	top: 0;
+	right: 0;
+	z-index: 995;
+}
+
+.moderno-table-header .moderno-table-row .moderno-table-item {
+	-moz-transition: background-color 0.1s ease-in-out;
+    -webkit-transition: background-color 0.1s ease-in-out;
+    -o-transition: background-color 0.1s ease-in-out;
+    transition: background-color 0.1s ease-in-out;
+}
+
+.moderno-table-header .moderno-table-row .moderno-table-item.hover {
+	background-color: #707070;
+}
+
+.moderno-table-header .moderno-table-row .moderno-table-item.highlight {
+	background-color: #8b9dc3;
+}
+
+
+.moderno-table-body .moderno-table-row .moderno-table-item {
+	-moz-transition: background-color 0.1s ease-in-out;
+    -webkit-transition: background-color 0.1s ease-in-out;
+    -o-transition: background-color 0.1s ease-in-out;
+    transition: background-color 0.1s ease-in-out;
+}
+
+.moderno-table-body .moderno-table-row.hover .moderno-table-item {
+	background-color: #707070;
+}
+
+.moderno-table-body .moderno-table-row.highlight .moderno-table-item {
+	background-color: #8b9dc3;
+}
+
+.moderno-table-body .moderno-table-row .moderno-table-item.hover {
+	background-color: #707070;
+}
+
+.moderno-table-body .moderno-table-row .moderno-table-item.highlight {
+	background-color: #8b9dc3;
+}
