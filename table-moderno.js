@@ -12,7 +12,7 @@ class TableModerno {
 		this.tableID = id;
 		this.config = {...TableModerno.default_config, ...n_config};
 
-		this.setWidthByRow(this.config.widthByRow);
+		this.setWidthByColumn(this.config.widthByColumn);
 
 		this.initHeaderDefaultEventResponders();
 		this.initBodyDefaultEventResponders();
@@ -161,7 +161,7 @@ class TableModerno {
 		}
 	}
 
-	setWidthByRow(widths) {
+	setWidthByColumn(widths) {
 		var tableExpectedLength = 0;
 		var items = $(`#${this.tableID} .moderno-table-header .moderno-table-row:first-child .moderno-table-item`);
 		for (var i = 0; i < items.length; i++) {
@@ -181,7 +181,7 @@ class TableModerno {
 // Moderno default settings
 TableModerno.default_config = {
 	defaultWidth: 300,
-	widthByRow: [],
+	widthByColumn: [],
 	scrollBarType: 'default',
 	stickHeader: true,
 	stickColumnsLeft: [1],
