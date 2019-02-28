@@ -128,6 +128,7 @@ The following CSS variables can be set to make your table fit your theme.
 
 **Default Theme Values**
 ```css
+:root {
     --moderno-background-color: #FFFFFF;
     --moderno-border-color: #434343;
 
@@ -161,6 +162,7 @@ The following CSS variables can be set to make your table fit your theme.
     --moderno-header-highlight-text-color: #434343;
     --moderno-body-highlight-color: #F996AC;
     --moderno-body-highlight-text-color: #434343;
+}
 ```
 #### Example
 
