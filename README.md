@@ -76,8 +76,8 @@ Default values will be assumed for unspecified keys.
 Create a `div` with the class `moderno-table-wrapper` with a unique `id` following the template below:
 ```html
 <div class="moderno-table-wrapper" id="table1">
-    <div class="moderno-table">
-        <div class="moderno-table-header">
+	<div class="moderno-table">
+		<div class="moderno-table-header">
 			<div class="moderno-table-row">
 				<div class="moderno-table-item">ID</div>
 				<div class="moderno-table-item">Name</div>
@@ -96,8 +96,8 @@ Create a `div` with the class `moderno-table-wrapper` with a unique `id` followi
 				<div class="moderno-table-item">Uh, that's the name of the restaurant</div>
 				<div class="moderno-table-item">Sleeping</div>
 			</div>
-        </div>
-    </div>
+		</div>
+	</div>
 </div>
 ```
 
