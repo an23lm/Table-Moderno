@@ -1,9 +1,14 @@
 # Table-Moderno
 A simple, powerful, and modern implementation of tables for the web.
 
+## Versions
+
+
 ## Installation
 ### Requirements
 * [jQuery version 3.x](https://code.jquery.com/)
+* `position: sticky` [browser support](https://developer.mozilla.org/en-US/docs/Web/CSS/position#Browser_compatibility) is required to enable sticky headers and columns.
+
 #### Clone
 Clone the repository and import `table-moderno.js` and `table-moderno.css` into your project
 ### OR
@@ -12,27 +17,27 @@ Clone the repository and import `table-moderno.js` and `table-moderno.css` into 
 ```html
 <!-- Always get the latest version -->
 <!-- Not recommended for production sites! -->
-<script src="https://cdn.jsdelivr.net/gh/an23lm/table-moderno/table-moderno.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/an23lm/table-moderno/table-moderno.css">
+<script src="https://cdn.jsdelivr.net/gh/an23lm/table-moderno/dist/able-moderno.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/an23lm/table-moderno/dist/table-moderno.css">
 
 <!-- Get minor updates and patch fixes within a major version -->
-<script src="https://cdn.jsdelivr.net/gh/an23lm/table-moderno@{major-version-number}/table-moderno.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/an23lm/table-moderno@{major-version-number}/table-moderno.css">
+<script src="https://cdn.jsdelivr.net/gh/an23lm/table-moderno@{major-version-number}/dist/table-moderno.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/an23lm/table-moderno@{major-version-number}/dist/table-moderno.css">
 
 <!-- Get patch fixes within a minor version -->
-<script src="https://cdn.jsdelivr.net/gh/an23lm/table-moderno@{major-version-number}.{minor-version-number}/table-moderno.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/an23lm/table-moderno@{major-version-number}.{minor-version-number}/table-moderno.css">
+<script src="https://cdn.jsdelivr.net/gh/an23lm/table-moderno@{major-version-number}.{minor-version-number}/dist/table-moderno.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/an23lm/table-moderno@{major-version-number}.{minor-version-number}/dist/table-moderno.css">
 
 <!-- Get a specific version -->
-<script src="https://cdn.jsdelivr.net/gh/an23lm/table-moderno@{major-version-number}.{minor-version-number}.{patch-number}/table-moderno.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/an23lm/table-moderno@{major-version-number}.{minor-version-number}.{patch-number}/table-moderno.css">
+<script src="https://cdn.jsdelivr.net/gh/an23lm/table-moderno@{major-version-number}.{minor-version-number}.{patch-number}/dist/table-moderno.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/an23lm/table-moderno@{major-version-number}.{minor-version-number}.{patch-number}/dist/table-moderno.css">
 ```
 
 #### Example
 Get version 1 with latest minor version and patch
 ```HTML
-<script src="https://cdn.jsdelivr.net/gh/an23lm/table-moderno@1/table-moderno.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/an23lm/table-moderno@1/table-moderno.css">
+<script src="https://cdn.jsdelivr.net/gh/an23lm/table-moderno@1/dist/table-moderno.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/an23lm/table-moderno@1/dist/table-moderno.css">
 ```
 
 #### ***Note: It is important to get the same version for both `.js` and `.css`***
@@ -40,7 +45,7 @@ Get version 1 with latest minor version and patch
 ## Usage
 
 ### Example
-Clone the repository and open `example.html` with your favourite browser.
+Clone the repository and open *demo1.html* in the *demo* folder with your favourite browser.
 
 ### Configuration
 **Default Configuration**
