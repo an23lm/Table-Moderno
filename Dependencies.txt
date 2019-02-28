@@ -1,1 +1,2 @@
 jQuery
+`position: sticky` browser support (https://developer.mozilla.org/en-US/docs/Web/CSS/position#Browser_compatibility)
