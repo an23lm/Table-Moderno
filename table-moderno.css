@@ -5,23 +5,62 @@
 	License: GNU v3.0
 */
 
+:root {
+	--moderno-background-color: #FFFFFF;
+	--moderno-border-color: #434343;
+
+	/* header colors */
+	--moderno-header-color: #113537;
+	--moderno-header-text-color: #F3F3F3;
+
+	/* body colors */
+	--moderno-body-odd-row-color: #FFEAD0;
+	--moderno-body-even-row-color: #A8B5B6;
+	--moderno-body-odd-row-text-color: #434343;
+	--moderno-body-odd-even-text-color: #F3F3F3;
+
+	/* fonts */
+	--moderno-header-font-family: -apple-system,system-ui,BlinkMacSystemFont,Roboto,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+	--moderno-header-font-weight: 500;
+	--moderno-header-font-size: 1.1em;
+
+	--moderno-body-font-family: -apple-system,system-ui,BlinkMacSystemFont,Roboto,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+	--moderno-body-font-weight: 300;
+	--moderno-body-font-size: 1em;
+
+	/* hover colors */
+	--moderno-header-hover-color: #96616B;
+	--moderno-header-hover-text-color: #F3F3F3;
+	--moderno-body-hover-color: #B28C93;
+	--moderno-body-hover-text-color: #F3F3F3;
+
+	/* highlight colors */
+	--moderno-header-highlight-color: #F889A2;
+	--moderno-header-highlight-text-color: #434343;
+	--moderno-body-highlight-color: #F996AC;
+	--moderno-body-highlight-text-color: #434343;
+}
+
 .moderno-table-wrapper {
 	position: relative;
-	width: 40vw;
-	height: 40vh;
+	width: 70vw;
+	height: 60vh;
 	margin-top: 5vh;
 	margin-left: 5vw;
-	background-color: transparent;
+	background-color: var(--moderno-background-color);
 	overflow: scroll;
 }
 
 .moderno-table {
 	min-width: 100%;
-	height: 100%;
+	min-height: 100%;
+	overflow: visible;
+	position: relative;
 }
 
 .moderno-table-body {
 	position: relative;
+	overflow: visible;
 }
 
 .moderno-table-row {
@@ -46,18 +85,31 @@
 */
 
 .moderno-table-header .moderno-table-row:first-child .moderno-table-item {
-	background-color: #d3d3d3;
-	border-bottom: 1px #939393;
-	border-top: 1px #939393;
+	background-color: var(--moderno-header-color);
+	color: var(--moderno-header-text-color);
+	font-family: var(--moderno-header-font-family);
+	font-weight: var(--moderno-header-font-weight);
+	font-size: var(--moderno-header-font-size);
+
+	border-bottom: 1px var(--moderno-border-color);
+	border-top: 1px var(--moderno-border-color);
 	border-style: solid;
 }
 
 .moderno-table-body .moderno-table-row:nth-child(even) .moderno-table-item {
-	background-color: #ffffff;
+	background-color: var(--moderno-body-even-row-color);
+	color: var(--moderno-body-odd-even-text-color);
+	font-family: var(--moderno-body-font-family);
+	font-weight: var(--moderno-body-font-weight);
+	font-size: var(--moderno-body-font-size);
 }
 
 .moderno-table-body .moderno-table-row:nth-child(odd) .moderno-table-item {
-	background-color: #f3f3f3;
+	background-color: var(--moderno-body-odd-row-color);
+	color: var(--moderno-body-odd-odd-text-color);
+	font-family: var(--moderno-body-font-family);
+	font-weight: var(--moderno-body-font-weight);
+	font-size: var(--moderno-body-font-size);
 }
 
 /* scroll bar */
@@ -75,7 +127,7 @@
 
 .moderno-table-wrapper.show-scroll-bar::scrollbar-thumb {
     border-radius: 8px;
-    border: 2px solid white;
+    border: 2px solid var(--moderno-background-color);
     background-color: rgba(0,0,0,0.5);
 }
 
@@ -93,7 +145,7 @@
 
 .moderno-table-wrapper.show-scroll-bar::-moz-scrollbar-thumb {
     border-radius: 8px;
-    border: 2px solid white;
+    border: 2px solid var(--moderno-background-color);
     background-color: rgba(0,0,0,0.5);
 }
 
@@ -111,7 +163,7 @@
 
 .moderno-table-wrapper.show-scroll-bar::-webkit-scrollbar-thumb {
     border-radius: 8px;
-    border: 2px solid white;
+    border: 2px solid var(--moderno-background-color);
     background-color: rgba(0,0,0,0.5);
 }
 /* end scroll bar */
@@ -119,34 +171,34 @@
 
 .moderno-table-item {
 	border: 0px;
-	border-right: 1px #939393;
+	border-right: 1px var(--moderno-border-color);
+	border-left: 1px var(--moderno-border-color);
 	border-style: solid;
+	margin-right: -1px;
 }
 
 .moderno-table-row .moderno-table-item:first-child {
-	border-left: 1px #939393;
+	/*border-left: 1px var(--moderno-border-color);
 	border-style: solid;
-}
+*/}
 
 .moderno-table-body .moderno-table-row:last-child .moderno-table-item {
-	border-bottom: 1px #939393;
+	border-bottom: 1px var(--moderno-border-color);
 	border-style: solid;
 }
 
-.moderno-table .moderno-table-row .moderno-table-item:first-child {
+.moderno-table-header.sticky {
 	position: sticky;
 	position: -webkit-sticky;
   	position: -moz-sticky;
   	position: -ms-sticky;
   	position: -o-sticky;
 
-	left: 0;
 	top: 0;
-	right: 0;
-	z-index: 994;
+	z-index: 995;
 }
 
-.moderno-table-header {
+.moderno-table-header .moderno-table-row .moderno-table-item.sticky {
 	position: sticky;
 	position: -webkit-sticky;
   	position: -moz-sticky;
@@ -154,46 +206,62 @@
   	position: -o-sticky;
 
 	left: 0;
-	top: 0;
 	right: 0;
 	z-index: 995;
 }
 
+.moderno-table-body .moderno-table-row .moderno-table-item.sticky {
+	position: sticky;
+	position: -webkit-sticky;
+  	position: -moz-sticky;
+  	position: -ms-sticky;
+  	position: -o-sticky;
+
+	left: 0;
+	right: 0;
+	z-index: 994;
+}
+
 .moderno-table-header .moderno-table-row .moderno-table-item {
-	-moz-transition: background-color 0.1s ease-in-out;
-    -webkit-transition: background-color 0.1s ease-in-out;
-    -o-transition: background-color 0.1s ease-in-out;
-    transition: background-color 0.1s ease-in-out;
+	-moz-transition: background-color 0.1s ease-in-out, color 0.1s linear;
+    -webkit-transition: background-color 0.1s ease-in-out, color 0.1s linear;
+    -o-transition: background-color 0.1s ease-in-out, color 0.1s linear;
+    transition: background-color 0.1s ease-in-out, color 0.1s linear;
 }
 
 .moderno-table-header .moderno-table-row .moderno-table-item.hover {
-	background-color: #707070;
+	background-color: var(--moderno-header-hover-color);
+	color: var(--moderno-header-hover-text-color);
 }
 
 .moderno-table-header .moderno-table-row .moderno-table-item.highlight {
-	background-color: #8b9dc3;
+	background-color: var(--moderno-header-highlight-color);
+	color: var(--moderno-header-hover-highlight-color);
 }
 
-
 .moderno-table-body .moderno-table-row .moderno-table-item {
-	-moz-transition: background-color 0.1s ease-in-out;
-    -webkit-transition: background-color 0.1s ease-in-out;
-    -o-transition: background-color 0.1s ease-in-out;
-    transition: background-color 0.1s ease-in-out;
+	-moz-transition: background-color 0.1s ease-in-out, color 0.1s linear;
+    -webkit-transition: background-color 0.1s ease-in-out, color 0.1s linear;
+    -o-transition: background-color 0.1s ease-in-out, color 0.1s linear;
+    transition: background-color 0.1s ease-in-out, color 0.1s linear;
 }
 
 .moderno-table-body .moderno-table-row.hover .moderno-table-item {
-	background-color: #707070;
+	background-color: var(--moderno-body-hover-color);
+	color: var(--moderno-body-hover-text-color);
 }
 
 .moderno-table-body .moderno-table-row.highlight .moderno-table-item {
-	background-color: #8b9dc3;
+	background-color: var(--moderno-body-highlight-color);
+	color: var(--moderno-body-hover-highlight-color);
 }
 
 .moderno-table-body .moderno-table-row .moderno-table-item.hover {
-	background-color: #707070;
+	background-color: var(--moderno-body-hover-color);
+	color: var(--moderno-body-hover-text-color);
 }
 
 .moderno-table-body .moderno-table-row .moderno-table-item.highlight {
-	background-color: #8b9dc3;
+	background-color: var(--moderno-body-highlight-color);
+	color: var(--moderno-body-hover-highlight-color);
 }
