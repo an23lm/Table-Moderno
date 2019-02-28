@@ -73,7 +73,7 @@ Default values will be assumed for unspecified keys.
 *Specify your own default values by overriding the `TableModerno.default_config` variable.*
 
 ### HTML
-Create the table with a unique `id` following the template below
+Create a `div` with the class `moderno-table-wrapper` with a unique `id` following the template below:
 ```html
 <div class="moderno-table-wrapper" id="table1">
     <div class="moderno-table">
@@ -104,8 +104,8 @@ Create the table with a unique `id` following the template below
 ### CSS
 ```css
 #table1 {
-    height: {your required height};
-    width: {your required width};
+    height: 80vh; //or whatever you want :)
+    width: 50vw;
 }
 ```
 
