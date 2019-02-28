@@ -1,8 +1,8 @@
 # Table-Moderno
 A simple, powerful, and modern implementation of tables for the web.
 
-## Versions
-
+## [Releases](https://github.com/an23lm/Table-Moderno/releases/)
+(v1.0.1-beta)[https://github.com/an23lm/Table-Moderno/releases/tag/v1.0.1-beta]
 
 ## Installation
 ### Requirements
