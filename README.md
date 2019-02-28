@@ -121,6 +121,57 @@ const config = {
 var moderno = new TableModerno("table1", config);
 ```
 
+## Customization
+The following CSS variables can be set to make your table fit your theme.
+
+*The CSS variables should be created in the `:root` tag, and should be linked after `table-moderno.css` to override the default values.*
+
+**Default Theme Values**
+```css
+    --moderno-background-color: #FFFFFF;
+    --moderno-border-color: #434343;
+
+    /* header colors */
+    --moderno-header-color: #113537;
+    --moderno-header-text-color: #F3F3F3;
+
+    /* body colors */
+    --moderno-body-odd-row-color: #FFEAD0;
+    --moderno-body-even-row-color: #A8B5B6;
+    --moderno-body-odd-row-text-color: #434343;
+    --moderno-body-odd-even-text-color: #F3F3F3;
+
+    /* fonts */
+    --moderno-header-font-family: -apple-system,system-ui,BlinkMacSystemFont,Roboto,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+    --moderno-header-font-weight: 500;
+    --moderno-header-font-size: 1.1em;
+
+    --moderno-body-font-family: -apple-system,system-ui,BlinkMacSystemFont,Roboto,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+    --moderno-body-font-weight: 300;
+    --moderno-body-font-size: 1em;
+
+    /* hover colors */
+    --moderno-header-hover-color: #96616B;
+    --moderno-header-hover-text-color: #F3F3F3;
+    --moderno-body-hover-color: #B28C93;
+    --moderno-body-hover-text-color: #F3F3F3;
+
+    /* highlight colors */
+    --moderno-header-highlight-color: #F889A2;
+    --moderno-header-highlight-text-color: #434343;
+    --moderno-body-highlight-color: #F996AC;
+    --moderno-body-highlight-text-color: #434343;
+```
+#### Example
+
+`YourTheme.css`
+```css
+:root {
+    --moderno-header-color: teal;
+    --moderno-header-text-color: black;
+}
+```
+
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
