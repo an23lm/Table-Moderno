@@ -1,8 +1,8 @@
 # Table-Moderno
 A simple, powerful, and modern implementation of tables for the web.
 
-## Versions
-
+## [Releases](https://github.com/an23lm/Table-Moderno/releases/)
+* [v1.0.1-beta](https://github.com/an23lm/Table-Moderno/releases/tag/v1.0.1-beta)
 
 ## Installation
 ### Requirements
@@ -73,39 +73,39 @@ Default values will be assumed for unspecified keys.
 *Specify your own default values by overriding the `TableModerno.default_config` variable.*
 
 ### HTML
-Create the table with a unique `id` following the template below
+Create a `div` with the class `moderno-table-wrapper` with a unique `id` following the template below:
 ```html
 <div class="moderno-table-wrapper" id="table1">
-    <div class="moderno-table">
-        <div class="moderno-table-header">
-            <div class="moderno-table-row">
-                <div class="moderno-table-item">ID</div>
-                <div class="moderno-table-item">Name</div>
-                <div class="moderno-table-item">Email</div>
-                <div class="moderno-table-item">ID</div>
-                <div class="moderno-table-item">Name</div>
-                <div class="moderno-table-item">Email</div>
-            </div>
-        </div>
-        <div class="moderno-table-body">
-            <div class="moderno-table-row">
-                <div class="moderno-table-item">1</div>
-                <div class="moderno-table-item">Anselm</div>
-                <div class="moderno-table-item">anselmjosephs@gmail.com</div>
-                <div class="moderno-table-item">1</div>
-                <div class="moderno-table-item">Anselm</div>
-                <div class="moderno-table-item">anselmjosephs@gmail.com</div>
-            </div>
-        </div>
-    </div>
+	<div class="moderno-table">
+		<div class="moderno-table-header">
+			<div class="moderno-table-row">
+				<div class="moderno-table-item">ID</div>
+				<div class="moderno-table-item">Name</div>
+				<div class="moderno-table-item">Email</div>
+				<div class="moderno-table-item">Phone</div>
+				<div class="moderno-table-item">Profession</div>
+				<div class="moderno-table-item">Hobbies</div>
+			</div>
+		</div>
+		<div class="moderno-table-body">
+			<div class="moderno-table-row">
+				<div class="moderno-table-item">1</div>
+				<div class="moderno-table-item">Patrick</div>
+				<div class="moderno-table-item">thisispatrick@krustykrab.com</div>
+				<div class="moderno-table-item">+1800-krusty-krab</div>
+				<div class="moderno-table-item">Uh, that's the name of the restaurant</div>
+				<div class="moderno-table-item">Sleeping</div>
+			</div>
+		</div>
+	</div>
 </div>
 ```
 
 ### CSS
 ```css
 #table1 {
-    height: {your required height};
-    width: {your required width};
+    height: 80vh; //or whatever you want :)
+    width: 50vw;
 }
 ```
 
@@ -128,6 +128,7 @@ The following CSS variables can be set to make your table fit your theme.
 
 **Default Theme Values**
 ```css
+:root {
     --moderno-background-color: #FFFFFF;
     --moderno-border-color: #434343;
 
@@ -161,6 +162,7 @@ The following CSS variables can be set to make your table fit your theme.
     --moderno-header-highlight-text-color: #434343;
     --moderno-body-highlight-color: #F996AC;
     --moderno-body-highlight-text-color: #434343;
+}
 ```
 #### Example
 
