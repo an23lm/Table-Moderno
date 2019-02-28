@@ -78,24 +78,24 @@ Create a `div` with the class `moderno-table-wrapper` with a unique `id` followi
 <div class="moderno-table-wrapper" id="table1">
     <div class="moderno-table">
         <div class="moderno-table-header">
-            <div class="moderno-table-row">
-                <div class="moderno-table-item">ID</div>
-                <div class="moderno-table-item">Name</div>
-                <div class="moderno-table-item">Email</div>
-                <div class="moderno-table-item">ID</div>
-                <div class="moderno-table-item">Name</div>
-                <div class="moderno-table-item">Email</div>
-            </div>
-        </div>
-        <div class="moderno-table-body">
-            <div class="moderno-table-row">
-                <div class="moderno-table-item">1</div>
-                <div class="moderno-table-item">Anselm</div>
-                <div class="moderno-table-item">anselmjosephs@gmail.com</div>
-                <div class="moderno-table-item">1</div>
-                <div class="moderno-table-item">Anselm</div>
-                <div class="moderno-table-item">anselmjosephs@gmail.com</div>
-            </div>
+			<div class="moderno-table-row">
+				<div class="moderno-table-item">ID</div>
+				<div class="moderno-table-item">Name</div>
+				<div class="moderno-table-item">Email</div>
+				<div class="moderno-table-item">Phone</div>
+				<div class="moderno-table-item">Profession</div>
+				<div class="moderno-table-item">Hobbies</div>
+			</div>
+		</div>
+		<div class="moderno-table-body">
+			<div class="moderno-table-row">
+				<div class="moderno-table-item">1</div>
+				<div class="moderno-table-item">Patrick</div>
+				<div class="moderno-table-item">thisispatrick@krustykrab.com</div>
+				<div class="moderno-table-item">+1800-krusty-krab</div>
+				<div class="moderno-table-item">Uh, that's the name of the restaurant</div>
+				<div class="moderno-table-item">Sleeping</div>
+			</div>
         </div>
     </div>
 </div>
