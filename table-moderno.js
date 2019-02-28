@@ -25,16 +25,17 @@ class TableModerno {
 	}
 
 	initHeaderDefaultEventResponders() {
+		var tableID = this.tableID;
 		$(`#${this.tableID} .moderno-table-header .moderno-table-item`).hover(
 			function() {
 				var n = $(this).index() + 1;
 				$(this).addClass('hover');
-				$(`#${this.tableID} .moderno-table-body .moderno-table-row .moderno-table-item:nth-child(${n})`).addClass('hover');
+				$(`#${tableID} .moderno-table-body .moderno-table-row .moderno-table-item:nth-child(${n})`).addClass('hover');
 			},
 			function() {
 				var n = $(this).index() + 1;
 				$(this).removeClass('hover');
-				$(`#${this.tableID} .moderno-table-body .moderno-table-row .moderno-table-item:nth-child(${n})`).removeClass('hover');
+				$(`#${tableID} .moderno-table-body .moderno-table-row .moderno-table-item:nth-child(${n})`).removeClass('hover');
 			}
 		);
 
@@ -42,7 +43,7 @@ class TableModerno {
 			function() {
 				var n = $(this).index() + 1;
 				$(this).toggleClass('highlight');
-				$(`#${this.tableID} .moderno-table-body .moderno-table-row .moderno-table-item:nth-child(${n})`).toggleClass('highlight');
+				$(`#${tableID} .moderno-table-body .moderno-table-row .moderno-table-item:nth-child(${n})`).toggleClass('highlight');
 			}
 		);
 	}
