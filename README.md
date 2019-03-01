@@ -114,7 +114,7 @@ Insert the following script at the end of the `body` tag
 ```javascript
 const config = {
     scrollBarType: 'always',
-    widthByRow: [100, 400, 500, 100, 100, 100],
+    widthByColumn: [100, 400, 500, 100, 100, 100],
     stickColumnsLeft: [1],
     stickColumnsRight: [4]
 };
@@ -140,7 +140,7 @@ The following CSS variables can be set to make your table fit your theme.
     --moderno-body-odd-row-color: #FFEAD0;
     --moderno-body-even-row-color: #A8B5B6;
     --moderno-body-odd-row-text-color: #434343;
-    --moderno-body-odd-even-text-color: #F3F3F3;
+    --moderno-body-even-row-text-color: #F3F3F3;
 
     /* fonts */
     --moderno-header-font-family: -apple-system,system-ui,BlinkMacSystemFont,Roboto,"Segoe UI","Helvetica Neue",Arial,sans-serif;

@@ -3,7 +3,7 @@
 	GitHub: github.com/an23lm
 	Email: anselmjosephs@gmail.com
 	License: GNU GPLv3
-	Version: v1.1.0-beta
+	Version: v1.1.1-beta
 */
 
 :root {
@@ -18,7 +18,7 @@
 	--moderno-body-odd-row-color: #FFEAD0;
 	--moderno-body-even-row-color: #A8B5B6;
 	--moderno-body-odd-row-text-color: #434343;
-	--moderno-body-odd-even-text-color: #F3F3F3;
+	--moderno-body-even-row-text-color: #F3F3F3;
 
 	/* fonts */
 	--moderno-header-font-family: -apple-system,system-ui,BlinkMacSystemFont,Roboto,"Segoe UI","Helvetica Neue",Arial,sans-serif;
@@ -97,7 +97,7 @@
 
 .moderno-table-body .moderno-table-row:nth-child(even) .moderno-table-item {
 	background-color: var(--moderno-body-even-row-color);
-	color: var(--moderno-body-odd-even-text-color);
+	color: var(--moderno-body-even-row-text-color);
 	font-family: var(--moderno-body-font-family);
 	font-weight: var(--moderno-body-font-weight);
 	font-size: var(--moderno-body-font-size);
@@ -105,13 +105,17 @@
 
 .moderno-table-body .moderno-table-row:nth-child(odd) .moderno-table-item {
 	background-color: var(--moderno-body-odd-row-color);
-	color: var(--moderno-body-odd-odd-text-color);
+	color: var(--moderno-body-odd-row-text-color);
 	font-family: var(--moderno-body-font-family);
 	font-weight: var(--moderno-body-font-weight);
 	font-size: var(--moderno-body-font-size);
 }
 
 /* scroll bar */
+.moderno-table-wrapper.show-scroll-bar::scrollbar-track {
+	background-color: var(--moderno-background-color);
+}
+
 .moderno-table-wrapper.show-scroll-bar::scrollbar {
 	appearance: none;
 }
@@ -130,6 +134,10 @@
     background-color: rgba(0,0,0,0.5);
 }
 
+.moderno-table-wrapper.show-scroll-bar::-moz-scrollbar-track {
+	background-color: var(--moderno-background-color);
+}
+
 .moderno-table-wrapper.show-scroll-bar::-moz-scrollbar {
 	-moz-appearance: none;
 }
@@ -146,6 +154,10 @@
     border-radius: 8px;
     border: 2px solid var(--moderno-background-color);
     background-color: rgba(0,0,0,0.5);
+}
+
+.moderno-table-wrapper.show-scroll-bar::-webkit-scrollbar-track {
+	background-color: var(--moderno-background-color);
 }
 
 .moderno-table-wrapper.show-scroll-bar::-webkit-scrollbar {
@@ -229,13 +241,13 @@
 }
 
 .moderno-table-header .moderno-table-row .moderno-table-item.hover {
-	background-color: var(--moderno-header-hover-color);
-	color: var(--moderno-header-hover-text-color);
+	background-color: var(--moderno-header-hover-color) !important;
+	color: var(--moderno-header-hover-text-color) !important;
 }
 
 .moderno-table-header .moderno-table-row .moderno-table-item.highlight {
-	background-color: var(--moderno-header-highlight-color);
-	color: var(--moderno-header-hover-highlight-color);
+	background-color: var(--moderno-header-highlight-color) !important;
+	color: var(--moderno-header-hover-highlight-color) !important;
 }
 
 .moderno-table-body .moderno-table-row .moderno-table-item {
@@ -246,21 +258,21 @@
 }
 
 .moderno-table-body .moderno-table-row.hover .moderno-table-item {
-	background-color: var(--moderno-body-hover-color);
-	color: var(--moderno-body-hover-text-color);
+	background-color: var(--moderno-body-hover-color) !important;
+	color: var(--moderno-body-hover-text-color) !important;
 }
 
 .moderno-table-body .moderno-table-row.highlight .moderno-table-item {
-	background-color: var(--moderno-body-highlight-color);
-	color: var(--moderno-body-hover-highlight-color);
+	background-color: var(--moderno-body-highlight-color) !important;
+	color: var(--moderno-body-hover-highlight-color) !important;
 }
 
 .moderno-table-body .moderno-table-row .moderno-table-item.hover {
-	background-color: var(--moderno-body-hover-color);
-	color: var(--moderno-body-hover-text-color);
+	background-color: var(--moderno-body-hover-color) !important;
+	color: var(--moderno-body-hover-text-color) !important;
 }
 
 .moderno-table-body .moderno-table-row .moderno-table-item.highlight {
-	background-color: var(--moderno-body-highlight-color);
-	color: var(--moderno-body-hover-highlight-color);
+	background-color: var(--moderno-body-highlight-color) !important;
+	color: var(--moderno-body-hover-highlight-color) !important;
 }

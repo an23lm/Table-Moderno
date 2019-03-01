@@ -3,7 +3,7 @@
 	GitHub: github.com/an23lm
 	Email: anselmjosephs@gmail.com
 	License: GNU GPLv3
-	Version: v1.1.0-beta
+	Version: v1.1.1-beta
 */
 
 class TableModerno {
