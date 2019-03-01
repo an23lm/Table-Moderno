@@ -3,7 +3,7 @@
 	GitHub: github.com/an23lm
 	Email: anselmjosephs@gmail.com
 	License: GNU GPLv3
-	Version: v1.0.1-beta
+	Version: v1.1.0-beta
 -->
 
 <!DOCTYPE html>
@@ -22,12 +22,12 @@
 		<div class="moderno-table">
 			<div class="moderno-table-header">
 				<div class="moderno-table-row">
-					<div class="moderno-table-item">ID</div>
-					<div class="moderno-table-item">Name</div>
-					<div class="moderno-table-item">Email</div>
-					<div class="moderno-table-item">Phone</div>
-					<div class="moderno-table-item">Profession</div>
-					<div class="moderno-table-item">Hobbies</div>
+					<div class="moderno-table-item" data-key="id">ID</div>
+					<div class="moderno-table-item" data-key="name">Name</div>
+					<div class="moderno-table-item" data-key="mail">Email</div>
+					<div class="moderno-table-item" data-key="ph">Phone</div>
+					<div class="moderno-table-item" data-key="prof">Profession</div>
+					<div class="moderno-table-item" data-key="hobbs">Hobbies</div>
 				</div>
 			</div>
 			<div class="moderno-table-body">
@@ -146,6 +146,11 @@
 			stickColumnsRight: [4]
 		};
 		var moderno = new TableModerno("table1", config);
+		
+		// const newData = [
+		// 	{id: 1, name: 'SquarePants', mail: 'squrepants@subway.com', ph: '+1800-doh', prof: 'pineapple', hobbs: 'ff?'}
+		// ]
+		// moderno.reloadTableWithData(newData);
 	</script>
 </body>
 </html>
