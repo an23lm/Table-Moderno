@@ -3,7 +3,7 @@
 	GitHub: github.com/an23lm
 	Email: anselmjosephs@gmail.com
 	License: GNU GPLv3
-	Version: v1.0.1-beta
+	Version: v1.1.0-beta
 */
 
 class TableModerno {
@@ -175,6 +175,53 @@ class TableModerno {
 			tableExpectedLength += $(`#${this.tableID} .moderno-table .moderno-table-header .moderno-table-item:nth-child(${i + 1})`).outerWidth();
 		}
 		// $(`#${this.tableID} .moderno-table`).width(tableExpectedLength);
+	}
+
+	reloadTableWithData(data) {
+		var colKeys = this.getHeaderColumnDataKeys();
+		var dataString = "";
+		for (var i = 0; i < data.length; i++) {
+			var rowArr = [];
+			for (var  j = 0; j < colKeys.length; j++) {
+				var item = data[i][colKeys[j]];
+				if (item == undefined) {
+					console.warn(`Error finding key '${colKeys[j]}' in data at row with index ${i}`);
+					rowArr.push('N/A');
+				} else {
+					rowArr.push(item);
+				}
+			}
+			dataString += this.getRowString(rowArr);
+		}
+		debugger;
+		$(`#${this.tableID} .moderno-table-body`).html(dataString);
+		this.setWidthByColumn(this.config.widthByColumn);
+		this.initBodyDefaultEventResponders();
+	}
+
+	getRowString(row) {
+		var string = `<div class="moderno-table-row">`;
+		for(var i = 0; i < row.length; i++) {
+			string += `<div class="moderno-table-item">${row[i]}</div>`;
+		}
+		string += `</div>`;
+		return string;
+	}
+
+	getHeaderColumnDataKeys() {
+		var keys = [];
+		$(`#${this.tableID} .moderno-table-header .moderno-table-row:first-child .moderno-table-item`)
+			.each(function() {
+				var key = $(this).attr('data-key');
+				if (key == undefined) {
+					console.warn(`data-key attribute is not set in header item at position ${$(this).index()}`);
+					keys.push('');
+				} else {
+					keys.push(key);
+				}
+			}
+		);
+		return keys;
 	}
 }
 
