@@ -163,9 +163,9 @@ The following CSS variables can be set to make your table fit your theme.
     --moderno-body-highlight-text-color: #434343;
     
     /* center content */
-    --moderno-table-item-vertical-center: center; // flex properties - flex-start, center, flex-end
-    --moderno-table-item-horizontal-center: center; // flex properties - flex-start, center, flex-end
-    --moderno-table-item-text-align: justify; // text-align properties - use justify or none
+    --moderno-table-item-vertical-center: center; /* flex properties - flex-start, center, flex-end */
+    --moderno-table-item-horizontal-center: center; /* flex properties - flex-start, center, flex-end */
+    --moderno-table-item-text-align: justify; /* text-align properties - use justify or none */
 }
 ```
 #### Example
