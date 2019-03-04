@@ -1,13 +1,18 @@
-/*
-	Author: Anselm Joseph
-	GitHub: github.com/an23lm
-	Email: anselmjosephs@gmail.com
-	License: GNU GPLv3
-	Version: v1.2.1
+/**
+ * Author: Anselm Joseph
+ * GitHub: github.com/an23lm
+ * Email: anselmjosephs@gmail.com
+ * License: GNU GPLv3
+ * Version: v1.2.1
 */
-
+/// Table Moderno Class
 class TableModerno {
 
+	/**
+	 * Init the table.
+	 * @param {string} id - id of div with class moderno-table-wrapper to create table on
+	 * @param {Object} n_config - User configuration for table, refer `TableModerno.default_config` for default config
+	*/
 	constructor(id, n_config) {
 		this.tableID = id;
 		this.config = {...TableModerno.default_config, ...n_config};
@@ -20,10 +25,13 @@ class TableModerno {
 		this.setScrollBarType(this.config.scrollBarType);
 		
 		this.toggleStickyHeader(this.config.stickHeader);
-		this.toggleStickyColumnsLeft(this.config.stickColumnsLeft);
-		this.toggleStickyColumnsRight(this.config.stickColumnsRight);
+		this.registerStickyColumnsLeft(this.config.stickColumnsLeft);
+		this.registerStickyColumnsRight(this.config.stickColumnsRight);
 	}
 
+	/**
+	 * Register `hover` and `click` events on `moderno-table-header`s `moderno-table-item`s
+	*/
 	initHeaderDefaultEventResponders() {
 		var tableID = this.tableID;
 		$(`#${this.tableID} .moderno-table-header .moderno-table-item`).hover(
@@ -48,31 +56,40 @@ class TableModerno {
 		);
 	}
 
+	/**
+	 * Register `hover` and `click` events on `moderno-table-body`s `moderno-table-row`s
+	*/
 	initBodyDefaultEventResponders() {
-		$(`#${this.tableID} .moderno-table-body .moderno-table-row`).hover(
-			function() {
+		$(`#${this.tableID} .moderno-table-body`).on({
+			mouseenter: function() {
 				$(this).addClass('hover');
 			},
-			function() {
+			mouseleave: function() {
 				$(this).removeClass('hover');
-			}
-		);
+			},
+		}, '.moderno-table-row');
 
-		$(`#${this.tableID} .moderno-table-body .moderno-table-row`).click(
+		$(`#${this.tableID} .moderno-table-body`).on('click', '.moderno-table-row',
 			function() {
 				$(this).toggleClass('highlight');
 			}
 		);
 	}
 
+	/**
+	 * Set table's scroll bar type
+	 * @param {string} type can either be 'always' or 'default'
+	*/
 	setScrollBarType(type) {
 		if (type == 'always') {
 			$(`#${this.tableID}.moderno-table-wrapper`).addClass('show-scroll-bar');
-		} else if (type == 'default') {
-
 		}
 	}
 
+	/**
+	 * Toggle sticky header
+	 * @param {boolean} flag to toggle on or off sticky header
+	*/
 	toggleStickyHeader(flag) {
 		if (flag) {
 			$(`#${this.tableID} .moderno-table-header`).addClass('sticky');
@@ -81,7 +98,11 @@ class TableModerno {
 		}
 	}
 
-	toggleStickyColumnsLeft(columns) {
+	/**
+	 * Register the columns to stick to the left and register scroll responder.
+	 * @param {Array(int)} columns to toggle on or off sticky columns
+	*/
+	registerStickyColumnsLeft(columns) {
 		columns.sort();
 		var maxLeft = 0;
 		var items = $(`#${this.tableID} .moderno-table-header .moderno-table-row:first-child .moderno-table-item`);
@@ -89,7 +110,7 @@ class TableModerno {
 
 		for (var i = 0; i < items.length; i++) {
 			if (columns[columnsCounter] - 1 == i) {
-				$(`#${this.tableID}.moderno-table-wrapper`).on("scroll", {left: maxLeft, itemIndex: i + 1, tableID: this.tableID}, this.scrollEventResponderOnLeft);
+				$(`#${this.tableID}.moderno-table-wrapper`).on('scroll', {left: maxLeft, itemIndex: i + 1, tableID: this.tableID}, this.scrollEventResponderOnLeft);
 
 				$(`#${this.tableID} .moderno-table-header .moderno-table-row .moderno-table-item:nth-child(${columns[columnsCounter]})`).css('left', maxLeft+'px');
 				$(`#${this.tableID} .moderno-table-body .moderno-table-row .moderno-table-item:nth-child(${columns[columnsCounter]})`).css('left', maxLeft+'px');
@@ -100,7 +121,11 @@ class TableModerno {
 		}
 	}
 
-	toggleStickyColumnsRight(columns) {
+	/**
+	 * Register the columns to stick to the right and register scroll responder.
+	 * @param {Array(number)} columns to toggle on or off sticky columns
+	*/
+	registerStickyColumnsRight(columns) {
 		columns.sort(function(a, b){return b-a});
 		var maxRight = 0;
 		var items = $(`#${this.tableID} .moderno-table-header .moderno-table-row:first-child .moderno-table-item`);
@@ -120,6 +145,10 @@ class TableModerno {
 		$(`#${this.tableID}.moderno-table-wrapper`).scroll();
 	}
 
+	/**
+	 * Handler for scroll left on table wrapper. Registered left sticky elements will be toggled to `postition: sticky` when appropriate.
+	 * @param {Object} event Scroll event
+	*/
 	scrollEventResponderOnLeft(event) {
 		var stickyoffset = event.data.left;
 		var index = event.data.itemIndex;
@@ -140,6 +169,10 @@ class TableModerno {
 		}
 	}
 
+	/**
+	 * Handler for scroll right on table wrapper. Registered right sticky elements will be toggled to `postition: sticky` when appropriate.
+	 * @param {Object} event Scroll event
+	*/
 	scrollEventResponderOnRight(event) {
 		var stickyoffset = event.data.right;
 		var index = event.data.itemIndex;
@@ -161,6 +194,10 @@ class TableModerno {
 		}
 	}
 
+	/**
+	 * Set the widths of existing `.moderno-table-items` elements
+	 * @param {Array(number)} widths Array of widths of columns from left to right, if not sepecified, default width will be applied
+	*/
 	setWidthByColumn(widths) {
 		var tableExpectedLength = 0;
 		var items = $(`#${this.tableID} .moderno-table-header .moderno-table-row:first-child .moderno-table-item`);
@@ -177,6 +214,10 @@ class TableModerno {
 		// $(`#${this.tableID} .moderno-table`).width(tableExpectedLength);
 	}
 
+	/**
+	 * Reload table with new data and re-set widths for new items
+	 * @param {Object} data New data to load the table with
+	*/
 	reloadTableWithData(data) {
 		var colKeys = this.getHeaderColumnDataKeys();
 		var dataString = "";
@@ -195,10 +236,16 @@ class TableModerno {
 		}
 		debugger;
 		$(`#${this.tableID} .moderno-table-body`).html(dataString);
+
 		this.setWidthByColumn(this.config.widthByColumn);
-		this.initBodyDefaultEventResponders();
+		$(`#${this.tableID}.moderno-table-wrapper`).scroll();
 	}
 
+	/**
+	 * Create a HTML string for new row to be inserted 
+	 * @param {Object} row Object containing the information of row data
+	 * @returns {string} HTML string 
+	*/
 	getRowString(row) {
 		var string = `<div class="moderno-table-row">`;
 		for(var i = 0; i < row.length; i++) {
@@ -208,6 +255,10 @@ class TableModerno {
 		return string;
 	}
 
+	/**
+	 * Get the `data-key` attribute specified in header columns. This attribute holds the key name for the respective column in the JS Object of row data.
+	 * @returns {Array(string)} an array of keys for the respective columns will be returned in order from left to right
+	*/
 	getHeaderColumnDataKeys() {
 		var keys = [];
 		$(`#${this.tableID} .moderno-table-header .moderno-table-row:first-child .moderno-table-item`)
@@ -225,7 +276,7 @@ class TableModerno {
 	}
 }
 
-// Moderno default settings
+/// Moderno Table's default configuration
 TableModerno.default_config = {
 	defaultWidth: 300,
 	widthByColumn: [],

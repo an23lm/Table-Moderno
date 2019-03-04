@@ -120,6 +120,48 @@ const config = {
 var moderno = new TableModerno("table1", config);
 ```
 
+## Populate your table with JS Objects
+* Create an attribute - `data-key` on the header columns as shown below.
+* The value of the `data-key` attribute should represent the name of the *key* on the js object. The corresponding *value* of the *key* will be displayed in that column.
+
+### Example
+```html
+<div class="moderno-table-wrapper" id="table1">
+    <div class="moderno-table">
+        <div class="moderno-table-header">
+            <div class="moderno-table-row">
+                <div class="moderno-table-item" data-key="id">ID</div>
+                <div class="moderno-table-item" data-key="name">Name</div>
+                <div class="moderno-table-item" data-key="mail">Email</div>
+                <div class="moderno-table-item" data-key="ph">Phone</div>
+                <div class="moderno-table-item" data-key="prof">Profession</div>
+                <div class="moderno-table-item" data-key="hobbs">Hobbies</div>
+            </div>
+        </div>
+        <div class="moderno-table-body">
+            <!-- body will be loaded from js object -->
+        </div>
+    </div>
+</div>
+``` 
+
+```javascript
+const config = {
+			scrollBarType: 'always',
+			widthByColumn: [100, 400, 500, 100, 100, 100],
+			stickColumnsLeft: [1],
+			stickColumnsRight: [4]
+		};
+var moderno = new TableModerno("table1", config);
+// newData is an array of objects to be displayed on `table1`
+// newData has 2 rows.
+// Each row is represented by an object.
+const row1 = {id: 1, name: 'SquarePants', mail: 'squrepants@krustykrab.com', ph: '+1800-partick', prof: 'pineapple', hobbs: 'ff?'};
+const row2 = {id: 2, name: 'Homer', mail: 'homer@donuts.com', ph: '+1800-doh', prof: 'springfield', hobbs: 'gg?'};
+const newData = [row1, row2];
+moderno.reloadTableWithData(newData);
+```
+
 ## Customization
 The following CSS variables can be set to make your table fit your theme.
 
