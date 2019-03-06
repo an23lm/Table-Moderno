@@ -184,13 +184,13 @@ class TableModerno {
 		var parentPos = $(`#${tableID}.moderno-table-wrapper`).offset().left + $(`#${tableID} .moderno-table`).outerWidth();
 		var offset = childPos - parentPos;
 		var diff = offset + stickyoffset;
-
-		if (diff <= 2 || diff <= -2 || diff >= 0) {
-			header.addClass("sticky");
-			body.addClass("sticky");
-		} else {
+		
+		if (diff < -2) {
 			header.removeClass("sticky");
 			body.removeClass("sticky");
+		} else {
+			header.addClass("sticky");
+			body.addClass("sticky");
 		}
 	}
 
@@ -234,10 +234,11 @@ class TableModerno {
 			}
 			dataString += this.getRowString(rowArr);
 		}
-		debugger;
 		$(`#${this.tableID} .moderno-table-body`).html(dataString);
 
 		this.setWidthByColumn(this.config.widthByColumn);
+		this.registerStickyColumnsLeft(this.config.stickColumnsLeft);
+		this.registerStickyColumnsRight(this.config.stickColumnsRight);
 		$(`#${this.tableID}.moderno-table-wrapper`).scroll();
 	}
 
