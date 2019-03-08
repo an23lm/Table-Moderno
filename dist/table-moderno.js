@@ -232,7 +232,7 @@ class TableModerno {
 					rowArr.push(item);
 				}
 			}
-			dataString += this.getRowString(rowArr);
+			dataString += this.getRowString(rowArr, i);
 		}
 		$(`#${this.tableID} .moderno-table-body`).html(dataString);
 
@@ -247,10 +247,10 @@ class TableModerno {
 	 * @param {Object} row Object containing the information of row data
 	 * @returns {string} HTML string 
 	*/
-	getRowString(row) {
+	getRowString(row, rowindex) {
 		var string = `<div class="moderno-table-row">`;
 		for(var i = 0; i < row.length; i++) {
-			string += `<div class="moderno-table-item">${row[i]}</div>`;
+			string += `<div class="moderno-table-item" id='moderno-table-${rowindex}-${i}'>${row[i]}</div>`;
 		}
 		string += `</div>`;
 		return string;
@@ -274,6 +274,15 @@ class TableModerno {
 			}
 		);
 		return keys;
+	}
+
+	setValueAtRowWithHeaderKey(value, row, headerkey) {
+		var keys = this.getHeaderColumnDataKeys();
+		for (var i = 0; i < keys.length; i++) {
+			if (headerkey == keys[i]) {
+				$(`#${this.tableID} #moderno-table-${row}-${i}`).html(value);
+			}
+		}
 	}
 }
 
