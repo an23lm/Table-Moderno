@@ -23,11 +23,11 @@
 	/* fonts */
 	--moderno-header-font-family: -apple-system,system-ui,BlinkMacSystemFont,Roboto,"Segoe UI","Helvetica Neue",Arial,sans-serif;
 	--moderno-header-font-weight: 500;
-	--moderno-header-font-size: 1.1em;
+	--moderno-header-font-size: 18px;
 
 	--moderno-body-font-family: -apple-system,system-ui,BlinkMacSystemFont,Roboto,"Segoe UI","Helvetica Neue",Arial,sans-serif;
 	--moderno-body-font-weight: 300;
-	--moderno-body-font-size: 1em;
+	--moderno-body-font-size: 15px;
 
 	/* hover colors */
 	--moderno-header-hover-color: #96616B;
@@ -69,7 +69,7 @@
 }
 
 .moderno-table-row {
-	display: flex;
+	font-size: 0px;
 }
 
 .moderno-table-item {
@@ -78,7 +78,8 @@
 	overflow: visible;
 	overflow-wrap: break-word;
 	word-break: break-all;
-	display: flex;
+	display: inline-block;
+	font-size: var(--moderno-body-font-size);
 	align-items: var(--moderno-table-item-vertical-center);
 	justify-content: var(--moderno-table-item-horizontal-center);
 	text-align: var(--moderno-table-item-text-align);
@@ -196,7 +197,7 @@
 	border-right: 1px var(--moderno-border-color);
 	border-left: 1px var(--moderno-border-color);
 	border-style: solid;
-	margin-right: -1px;
+	margin-left: -1px;
 }
 
 .moderno-table-row .moderno-table-item:first-child {
