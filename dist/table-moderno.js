@@ -211,7 +211,7 @@ class TableModerno {
 			}
 			tableExpectedLength += $(`#${this.tableID} .moderno-table .moderno-table-header .moderno-table-item:nth-child(${i + 1})`).outerWidth();
 		}
-		// $(`#${this.tableID} .moderno-table`).width(tableExpectedLength);
+		$(`#${this.tableID} .moderno-table`).width(tableExpectedLength);
 	}
 
 	/**
