@@ -180,8 +180,8 @@ class TableModerno {
 
 		var header = $(`#${tableID} .moderno-table-header .moderno-table-row .moderno-table-item:nth-child(${index})`);
 		var body = $(`#${tableID} .moderno-table-body .moderno-table-row .moderno-table-item:nth-child(${index})`)
-		var childPos = header.offset().left + header.outerWidth() - 1;
-		var parentPos = $(`#${tableID}.moderno-table-wrapper`).offset().left + $(`#${tableID} .moderno-table`).outerWidth();
+		var childPos = header.offset().left + header.outerWidth();
+		var parentPos = $(`#${tableID}.moderno-table-wrapper`).offset().left + $(`#${tableID}.moderno-table-wrapper`).width(); 
 		var offset = childPos - parentPos;
 		var diff = offset + stickyoffset;
 		
@@ -199,7 +199,7 @@ class TableModerno {
 	 * @param {Array(number)} widths Array of widths of columns from left to right, if not sepecified, default width will be applied
 	*/
 	setWidthByColumn(widths) {
-		var tableExpectedLength = 0;
+		var tableExpectedLength = -1;
 		var items = $(`#${this.tableID} .moderno-table-header .moderno-table-row:first-child .moderno-table-item`);
 		for (var i = 0; i < items.length; i++) {
 			if (i < widths.length) {
@@ -209,9 +209,9 @@ class TableModerno {
 				$(`#${this.tableID} .moderno-table .moderno-table-header .moderno-table-item:nth-child(${i + 1})`).width(this.config.defaultWidth);
 				$(`#${this.tableID} .moderno-table .moderno-table-body .moderno-table-item:nth-child(${i + 1})`).width(this.config.defaultWidth);
 			}
-			tableExpectedLength += $(`#${this.tableID} .moderno-table .moderno-table-header .moderno-table-item:nth-child(${i + 1})`).outerWidth();
+			tableExpectedLength += $(`#${this.tableID} .moderno-table .moderno-table-header .moderno-table-item:nth-child(${i + 1})`).outerWidth() - 1; // -1 because of the `margin-right: -1px` on table item
 		}
-		// $(`#${this.tableID} .moderno-table`).width(tableExpectedLength);
+		$(`#${this.tableID} .moderno-table`).width(tableExpectedLength);
 	}
 
 	/**

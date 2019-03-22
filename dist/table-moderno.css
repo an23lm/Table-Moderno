@@ -56,9 +56,6 @@
 }
 
 .moderno-table {
-	min-width: 100%;
-	min-height: 100%;
-	overflow: visible;
 	position: relative;
 }
 
@@ -76,10 +73,11 @@
 	height: auto;
 	overflow: visible;
 	overflow-wrap: break-word;
-	display: flex;
+	word-wrap: break-word;
 	align-items: var(--moderno-table-item-vertical-center);
 	justify-content: var(--moderno-table-item-horizontal-center);
 	text-align: var(--moderno-table-item-text-align);
+	z-index: 500;
 }
 
 /*
