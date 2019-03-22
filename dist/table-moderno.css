@@ -65,11 +65,10 @@
 .moderno-table-body {
 	position: relative;
 	overflow: visible;
-	display: block;
 }
 
 .moderno-table-row {
-	display: flex;
+	display: inline-flex;
 }
 
 .moderno-table-item {
@@ -77,7 +76,6 @@
 	height: auto;
 	overflow: visible;
 	overflow-wrap: break-word;
-	word-break: break-all;
 	display: flex;
 	align-items: var(--moderno-table-item-vertical-center);
 	justify-content: var(--moderno-table-item-horizontal-center);
