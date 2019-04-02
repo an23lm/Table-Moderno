@@ -284,6 +284,15 @@ class TableModerno {
 			}
 		}
 	}
+
+	setTextColorAtRowWithHeaderKey(value, row, headerkey) {
+		var keys = this.getHeaderColumnDataKeys();
+		for (var i = 0; i < keys.length; i++) {
+			if (headerkey == keys[i]) {
+				$(`#${this.tableID} #moderno-table-${row}-${i}`).css("color",value);
+			}
+		}
+	}
 }
 
 /// Moderno Table's default configuration
