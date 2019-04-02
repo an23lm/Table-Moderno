@@ -1,2 +1,3 @@
 - Anselm Joseph (anselmjosephs@gmail.com) [github.com/an23lm]
 - Learn how to make your github repo a CDN [https://gomakethings.com/how-to-turn-any-github-repo-into-a-cdn/]
+- Manoj 
