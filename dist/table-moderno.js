@@ -60,7 +60,7 @@ class TableModerno {
 	 * Add loading div
 	 */
 	initLoadingIndicator() {
-		$(`#${this.tableID} .moderno-table-body`).append(`<div class="moderno-loading-indicator"></div>`);
+		$(`#${this.tableID} .moderno-table`).append(`<div class="moderno-loading-indicator"></div>`);
 	}
 
 	/**
