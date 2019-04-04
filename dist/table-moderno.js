@@ -18,7 +18,7 @@ class TableModerno {
 		this.config = {...TableModerno.default_config, ...n_config};
 
 		this.setWidthByColumn(this.config.widthByColumn);
-
+		this.initLoadingIndicator();
 		this.initHeaderDefaultEventResponders();
 		this.initBodyDefaultEventResponders();
 		
@@ -54,6 +54,13 @@ class TableModerno {
 				$(`#${tableID} .moderno-table-body .moderno-table-row .moderno-table-item:nth-child(${n})`).toggleClass('highlight');
 			}
 		);
+	}
+
+	/**
+	 * Add loading div
+	 */
+	initLoadingIndicator() {
+		$(`#${this.tableID} .moderno-table-body`).append(`<div class="moderno-loading-indicator"></div>`);
 	}
 
 	/**
@@ -303,7 +310,7 @@ class TableModerno {
 		}
 	}
 
-	startLoading() {
+	showLoadingIndicator() {
 		var width = $(`#${this.tableID} .moderno-table`).outerWidth();
 		var headerHeight = $(`#${this.tableID} .moderno-table-header`).outerHeight();
 		var height = $(`#${this.tableID}.moderno-table-wrapper`).outerHeight() - headerHeight;
@@ -315,7 +322,7 @@ class TableModerno {
 		$(`#${this.tableID} .moderno-loading-indicator`).animate({opacity: 1}, 200);
 	}
 
-	stopLoading() {
+	hideLoadingIndicator() {
 		$(`#${this.tableID} .moderno-loading-indicator`).animate({opacity: 0}, 200, () => {
 			$(`#${this.tableID} .moderno-loading-indicator`).css('display', 'none');
 		});
