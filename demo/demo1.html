@@ -30,6 +30,8 @@
 					<div class="moderno-table-item" data-key="hobbs">Hobbies</div>
 				</div>
 			</div>
+			<div class="moderno-loading-indicator">
+			</div>
 			<div class="moderno-table-body">
 				<div class="moderno-table-row">
 					<div class="moderno-table-item">1</div>
@@ -152,10 +154,14 @@
 		for (var i = 0; i < 40; i++) {
 			newData.push(obj);
 		}
+		moderno.startLoading();
 		moderno.reloadTableWithData(newData);
 		moderno.setValueAtRowWithHeaderKey(20, 0, 'id');
 		moderno.setTextColorAtRowWithHeaderKey("red", 0, "id");
 		moderno.setCssAtRowWithHeaderKey("background","Black", 0 , "id");
+		setTimeout(() => {
+			moderno.stopLoading();
+		}, 5000);
 	</script>
 </body>
 </html>

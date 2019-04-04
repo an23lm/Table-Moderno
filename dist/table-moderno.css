@@ -283,3 +283,40 @@
 	background-color: var(--moderno-body-highlight-color) !important;
 	color: var(--moderno-body-hover-highlight-color) !important;
 }
+
+.moderno-loading-indicator {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 999;
+	display: none;
+	
+	background: linear-gradient(270deg, var(--moderno-body-odd-row-color), var(--moderno-body-even-row-color));
+	background-size: 400% 400%;
+
+	-webkit-animation: loading-animation 4s ease infinite;
+	-moz-animation: loading-animation 4s ease infinite;
+	-o-animation: loading-animation 4s ease infinite;
+	animation: loading-animation 4s ease infinite;
+}
+
+@-webkit-keyframes loading-animation {
+	0%{background-position:0% 50%}
+	50%{background-position:100% 50%}
+	100%{background-position:0% 50%}
+}
+@-moz-keyframes loading-animation {
+	0%{background-position:0% 50%}
+	50%{background-position:100% 50%}
+	100%{background-position:0% 50%}
+}
+@-o-keyframes loading-animation {
+	0%{background-position:0% 50%}
+	50%{background-position:100% 50%}
+	100%{background-position:0% 50%}
+}
+@keyframes loading-animation { 
+	0%{background-position:0% 50%}
+	50%{background-position:100% 50%}
+	100%{background-position:0% 50%}
+}

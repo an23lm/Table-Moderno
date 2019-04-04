@@ -302,6 +302,24 @@ class TableModerno {
 			}
 		}
 	}
+
+	startLoading() {
+		var width = $(`#${this.tableID} .moderno-table`).outerWidth();
+		var headerHeight = $(`#${this.tableID} .moderno-table-header`).outerHeight();
+		var height = $(`#${this.tableID}.moderno-table-wrapper`).outerHeight() - headerHeight;
+
+		$(`#${this.tableID} .moderno-loading-indicator`).width(width).height(height).css('top', headerHeight);
+		$(`#${this.tableID}.moderno-table-wrapper`).css('overflow-y', 'hidden');
+		$(`#${this.tableID}.moderno-table-wrapper`).css('overflow-x', 'scroll');
+		$(`#${this.tableID} .moderno-loading-indicator`).css('opacity', 0).css('display', 'block');
+		$(`#${this.tableID} .moderno-loading-indicator`).animate({opacity: 1}, 200);
+	}
+
+	stopLoading() {
+		$(`#${this.tableID} .moderno-loading-indicator`).animate({opacity: 0}, 200, () => {
+			$(`#${this.tableID} .moderno-loading-indicator`).css('display', 'none');
+		});
+	}
 }
 
 /// Moderno Table's default configuration
