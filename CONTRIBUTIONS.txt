@@ -1,2 +1,4 @@
 - Anselm Joseph (anselmjosephs@gmail.com) [github.com/an23lm]
+- Manoj Choudary () [https://github.com/newtechguy]
 - Learn how to make your github repo a CDN [https://gomakethings.com/how-to-turn-any-github-repo-into-a-cdn/]
+- Icons made by Dave Gandy from www.flaticon.com is licensed by CC 3.0 BY

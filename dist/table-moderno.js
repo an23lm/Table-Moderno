@@ -18,7 +18,10 @@ class TableModerno {
 		this.config = {...TableModerno.default_config, ...n_config};
 
 		this.setWidthByColumn(this.config.widthByColumn);
+
 		this.initLoadingIndicator();
+		this.initSortingView();
+		
 		this.initHeaderDefaultEventResponders();
 		this.initBodyDefaultEventResponders();
 		
@@ -57,10 +60,50 @@ class TableModerno {
 	}
 
 	/**
-	 * Add loading div
+	 * Init loading indicator
 	 */
 	initLoadingIndicator() {
 		$(`#${this.tableID} .moderno-table`).append(`<div class="moderno-loading-indicator"></div>`);
+	}
+
+	/**
+	 * Init sorting view
+	 */
+	initSortingView() {
+		this.sortHeaderList = [];
+		this.sortHeaderDirection = {};
+
+		this.prevSortHeaderList = [];
+		this.prevSortHeaderDirection = {};
+
+		var items = $(`#${this.tableID} .moderno-table-header .moderno-table-row:first-child .moderno-table-item`);
+		var itemshtml = "";
+		for (var i = 0; i < items.length; i++) {
+			itemshtml += `
+						<div class="moderno-sorting-item" data-key="${$(items[i]).attr('data-key')}">
+							<div class="moderno-sorting-order-number"></div>
+							<label class="pure-material-checkbox moderno-sorting-item-checkbox">
+								<input type="checkbox" data-key="${$(items[i]).attr('data-key')}">
+								<span>${$(items[i]).html()}</span>
+							</label>
+							<button class="sort-button-wrapper sort-up" data-direction="up" onclick="event.stopPropagation();"><img class="ass-img"/></button>
+							<button class="sort-button-wrapper sort-down" data-direction="down" onclick="event.stopPropagation();"><img class="dec-img"/></button>
+						</div>`;
+		}
+
+		$(`#${this.tableID} .moderno-table`).append(`
+			<div class="moderno-sorting-background-view">
+				<div class="moderno-sorting-view">
+					<div class="moderno-sorting-view-title"><span>Sort by</span></div>
+					<div class="moderno-sorting-items">${itemshtml}</div>
+					<div class="moderno-sorting-footer"><input class="cancel-button" type='button' value='Cancel'><input class="apply-button" type='button' value='Apply'></div></div>
+				</div>
+			</div>`);
+		
+		$(`#${this.tableID} .moderno-table .moderno-sorting-view .moderno-sorting-item input`).on('change', (event) => { this.addToSortList(event.currentTarget); });
+		$(`#${this.tableID} .moderno-table .moderno-sorting-view .moderno-sorting-item .sort-button-wrapper`).on('click', (event) => { this.setSortDirection(event.currentTarget); });
+		$(`#${this.tableID} .moderno-table .moderno-sorting-view .cancel-button`).on('click', () => { this.closeSortView.call(this, false);});
+		$(`#${this.tableID} .moderno-table .moderno-sorting-view .apply-button`).on('click', () => { this.closeSortView.call(this, true);});
 	}
 
 	/**
@@ -153,9 +196,138 @@ class TableModerno {
 	}
 
 	/**
+	 * Open sorting view
+	 */
+	openSortView() {
+		this.prevSortHeaderList = [...this.sortHeaderList];
+		this.prevSortHeaderDirection = Object.assign({}, this.sortHeaderDirection);
+
+		var items = $(`#${this.tableID} .moderno-table .moderno-sorting-view .moderno-sorting-item`);
+		for (var i = 0; i < items.length; i++) {
+			var headerKey = $(items[i]).attr('data-key');
+			var index = this.sortHeaderList.indexOf(headerKey);
+			if (index > -1) {
+				$($(items[i]).children('.moderno-sorting-order-number')[0]).html(index + 1);
+				$($(items[i]).children('.moderno-sorting-item-checkbox').children('input')[0]).prop("checked", true);
+				var sortUp = this.sortHeaderDirection[headerKey];
+				if (!sortUp) {
+					$($(items[i]).children('sort-down')).click();
+				} else {
+					$($(items[i]).children('sort-up')).click();
+				}
+			} else {
+				$($(items[i]).children('.moderno-sorting-order-number')[0]).html('');
+				$($(items[i]).children('.moderno-sorting-item-checkbox').children('input')[0]).prop("checked", false);
+				$(items[i]).children('.sort-button-wrapper').removeClass('active');
+			}
+		}
+		$(`#${this.tableID} .moderno-sorting-background-view`).css('opacity', 0).css('display', 'flex');
+		$(`#${this.tableID} .moderno-sorting-background-view`).animate({opacity: 1}, 200);
+	}
+
+	/**
+	 * Close sorting view and save or cancel
+	 */
+	closeSortView(apply) {
+		if (apply === true) {
+			this.prevSortHeaderList = [...this.sortHeaderList];
+			this.prevSortHeaderDirection = Object.assign({}, this.sortHeaderDirection);
+			this.showLoadingIndicator();
+			if (this.sortHeaderList.length == 0) {
+				this.reloadTableWithData(this.prevTableData);
+				this.hideLoadingIndicator();
+			} else {
+				this.applySortList();
+			}
+		} else if (apply === false) {
+			this.sortHeaderList = [...this.prevSortHeaderList];
+			this.sortHeaderDirection = Object.assign({}, this.prevSortHeaderDirection);
+		}
+		$(`#${this.tableID} .moderno-sorting-background-view`).animate({opacity: 0}, 200,() => {
+			$(`#${this.tableID} .moderno-sorting-background-view`).css('display', 'none');
+		});
+		return;
+	}
+
+	/**
+	 * Add a header to the sort list
+	 */
+	addToSortList(target) {
+		var selected = $(target).is(":checked");
+		var headerKey = $(target).attr("data-key");
+		if (selected) {
+			this.sortHeaderList.push(headerKey);
+			var upButton = $(target).parent().parent().children()[2];
+			var orderNumber = $(target).parent().parent().children('.moderno-sorting-order-number')[0];
+			$(orderNumber).html(this.sortHeaderList.length);
+			this.setSortDirection(upButton);
+		} else {
+			var index = this.sortHeaderList.indexOf(headerKey);
+			if (index > -1) {
+				this.sortHeaderList.splice(index, 1);
+			}
+			var orderNumber = $(target).parent().parent().children('.moderno-sorting-order-number')[0];
+			$(orderNumber).html('');
+			$(target).parent().parent().children(".active").removeClass("active");
+		}
+	}
+
+	/**
+	 * Select sort type for header 
+	 */
+	setSortDirection(target) {
+		var inputItem = $(target).parent().children('.moderno-sorting-item-checkbox').children('input')[0];
+		var selected = $(inputItem).is(":checked");
+		if (selected) {
+			var sortUp = $(target).attr('data-direction') === 'up';
+			var headerKey = $(target).parent().attr("data-key");
+			this.sortHeaderDirection[headerKey] = sortUp;
+			$(target).parent().children(".active").removeClass("active");
+			$(target).addClass('active');
+		}
+	}
+
+	/**
+	 * Apply the sort list
+	 */
+	applySortList() {
+		var sortPromises = [];
+		for (var i = 0; i < this.sortHeaderList.length; i++) {
+			sortPromises.push(this.sort(this.sortHeaderList[i]));
+		}
+
+		Promise.all(sortPromises).then(() => {
+			this.reloadTableWithData(this.tableData);
+			this.hideLoadingIndicator();
+		});
+	}
+
+	/**
+	 * Sort by header
+	 */
+	sort(key) {
+		return new Promise((resolve, reject) => {
+			var sortUp = this.sortHeaderDirection[key];
+			if (!sortUp) {
+				this.tableData.sort(function(a, b) {
+					var x = a[key]; var y = b[key];
+					return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+				});
+			} else {
+				this.tableData.sort(function(a, b) {
+					var x = a[key]; var y = b[key];
+					return ((x > y) ? -1 : ((x < y) ? 1 : 0));
+				});
+			}
+			resolve();
+		});
+	}
+	
+
+	/**
 	 * Handler for scroll left on table wrapper. Registered left sticky elements will be toggled to `postition: sticky` when appropriate.
 	 * @param {Object} event Scroll event
-	*/
+	 */
 	scrollEventResponderOnLeft(event) {
 		var stickyoffset = event.data.left;
 		var index = event.data.itemIndex;
@@ -179,7 +351,7 @@ class TableModerno {
 	/**
 	 * Handler for scroll right on table wrapper. Registered right sticky elements will be toggled to `postition: sticky` when appropriate.
 	 * @param {Object} event Scroll event
-	*/
+	 */
 	scrollEventResponderOnRight(event) {
 		var stickyoffset = event.data.right;
 		var index = event.data.itemIndex;
@@ -226,6 +398,9 @@ class TableModerno {
 	 * @param {Object} data New data to load the table with
 	*/
 	reloadTableWithData(data) {
+		this.prevTableData = [...data];
+		this.tableData = [...data];
+
 		var colKeys = this.getHeaderColumnDataKeys();
 		var dataString = "";
 		for (var i = 0; i < data.length; i++) {
