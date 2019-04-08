@@ -30,6 +30,8 @@ class TableModerno {
 		this.toggleStickyHeader(this.config.stickHeader);
 		this.registerStickyColumnsLeft(this.config.stickColumnsLeft);
 		this.registerStickyColumnsRight(this.config.stickColumnsRight);
+
+		this.showTooltip();
 	}
 
 	/**
@@ -421,6 +423,7 @@ class TableModerno {
 		this.setWidthByColumn(this.config.widthByColumn);
 		this.registerStickyColumnsLeft(this.config.stickColumnsLeft);
 		this.registerStickyColumnsRight(this.config.stickColumnsRight);
+		this.showTooltip();
 		$(`#${this.tableID}.moderno-table-wrapper`).scroll();
 	}
 
@@ -431,8 +434,9 @@ class TableModerno {
 	*/
 	getRowString(row, rowindex) {
 		var string = `<div class="moderno-table-row">`;
+		var clipClass = this.config.singleLineRows ? "clip" : "no-clip";
 		for(var i = 0; i < row.length; i++) {
-			string += `<div class="moderno-table-item" id='moderno-table-${rowindex}-${i}'>${row[i]}</div>`;
+			string += `<div class="moderno-table-item ${clipClass}" id='moderno-table-${rowindex}-${i}' tooltip='${row[i]}' tooltip-persistent>${row[i]}</div>`;
 		}
 		string += `</div>`;
 		return string;
@@ -468,19 +472,14 @@ class TableModerno {
 	}
 
 	setTextColorAtRowWithHeaderKey(value, row, headerkey) {
-		var keys = this.getHeaderColumnDataKeys();
-		for (var i = 0; i < keys.length; i++) {
-			if (headerkey == keys[i]) {
-				$(`#${this.tableID} #moderno-table-${row}-${i}`).css("color",value);
-			}
-		}
+		this.setCssAtRowWithHeaderKey('color', value, row, headerkey);
 	}
 
 	setCssAtRowWithHeaderKey(type, value, row, headerkey) {
 		var keys = this.getHeaderColumnDataKeys();
 		for (var i = 0; i < keys.length; i++) {
 			if (headerkey == keys[i]) {
-				$(`#${this.tableID} #moderno-table-${row}-${i}`).css(type,value);
+				$(`#${this.tableID} #moderno-table-${row}-${i}`).attr('style', function(i,s) { return s + `${type}: ${value} !important;` });
 			}
 		}
 	}
@@ -502,6 +501,24 @@ class TableModerno {
 			$(`#${this.tableID} .moderno-loading-indicator`).css('display', 'none');
 		});
 	}
+
+	showTooltip() {
+		$(`#${this.tableID} .moderno-table-body .moderno-table-item`).on({
+			mouseenter: (event) => {
+				var didOverflow = $(event.currentTarget)[0].scrollWidth > $(event.currentTarget).innerWidth();
+				if (didOverflow) {
+					var itemPos = $(event.currentTarget).position();
+					var headerHeight = $(`#${this.tableID} .moderno-table-header`).outerHeight();
+					itemPos.top += headerHeight;
+					var text = $(event.currentTarget).html();
+					$(`#${this.tableID} .moderno-tooltip`).html(text).css({top: itemPos.top, left: itemPos.left}).addClass('active');
+				}
+			},
+			mouseleave: (event) => {
+				$(`#${this.tableID} .moderno-tooltip`).removeClass('active');
+			}
+		});
+	}
 }
 
 /// Moderno Table's default configuration
@@ -511,5 +528,6 @@ TableModerno.default_config = {
 	scrollBarType: 'default',
 	stickHeader: true,
 	stickColumnsLeft: [1],
-	stickColumnsRight: [6]
+	stickColumnsRight: [6],
+	singleLineRows: false
 };

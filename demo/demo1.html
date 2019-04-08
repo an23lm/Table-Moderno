@@ -21,6 +21,7 @@
 	<button onclick="openSort();">Open Sort</button>
 	<div class="moderno-table-wrapper" id="table1">
 		<div class="moderno-table">
+			<div class="moderno-tooltip">tooltip</div>
 			<div class="moderno-table-header">
 				<div class="moderno-table-row">
 					<div class="moderno-table-item" data-key="id">ID</div>
@@ -67,7 +68,7 @@
 				<div class="moderno-table-row">
 					<div class="moderno-table-item">1</div>
 					<div class="moderno-table-item">Patrick</div>
-					<div class="moderno-table-item">thisispatrick@krustykrab.com</div>
+					<div class="moderno-table-item" tooltip="thisispatrick">thisispatrick@krustykrab.com</div>
 					<div class="moderno-table-item">+1800-krusty-krab</div>
 					<div class="moderno-table-item">Uh, that's the name of the restaurant</div>
 					<div class="moderno-table-item">Sleeping</div>
@@ -142,9 +143,11 @@
 	<script type="text/javascript">
 		const config = {
 			scrollBarType: 'always',
-			widthByColumn: [100, 400, 500, 100, 100, 100],
+			widthByColumn: [100, 100, 100, 100, 100, 100],
 			stickColumnsLeft: [1],
-			stickColumnsRight: [4]
+			stickColumnsRight: [4],
+			stickHeader: true,
+			singleLineRows: true
 		};
 		var moderno = new TableModerno("table1", config);
 		
@@ -162,7 +165,7 @@
 
 		setTimeout(() => {
 			moderno.hideLoadingIndicator();
-		}, 5000);
+		}, 500);
 
 		function openSort() {
 			moderno.openSortView();

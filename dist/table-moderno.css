@@ -45,6 +45,17 @@
 	--moderno-table-item-vertical-center: center;
 	--moderno-table-item-horizontal-center: center;
 	--moderno-table-item-text-align: none;
+
+	/* tooltip colors */
+	--moderno-tooltip-background-color: white;
+	--moderno-tooltip-text-color: #434343;
+	--moderno-tooltip-box-shadow: 2px 2px 5px #434343;
+	--moderno-tooltip-border-radius: 5px;
+	--moderno-tooltip-padding: 4px 8px;
+	--moderno-tooltip-font-size: 15px;
+	--moderno-tooltip-font-weight: 300;
+	--moderno-tooltip-margin-top: -20px;
+	--moderno-tooltip-margin-left: 5px;
 }
 
 .moderno-table-wrapper {
@@ -71,13 +82,53 @@
 .moderno-table-item {
 	padding: 4pt 8pt;
 	height: auto;
-	overflow: visible;
-	overflow-wrap: break-word;
-	word-wrap: break-word;
+	z-index: 500;
+
 	align-items: var(--moderno-table-item-vertical-center);
 	justify-content: var(--moderno-table-item-horizontal-center);
 	text-align: var(--moderno-table-item-text-align);
-	z-index: 500;
+}
+
+.moderno-table-item.clip {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.moderno-table-item.no-clip {
+	overflow: auto;
+	overflow-wrap: break-word;
+	word-wrap: break-word;
+}
+
+/* tooltip */
+.moderno-tooltip {
+	background: var(--moderno-tooltip-background-color);
+	color: var(--moderno-tooltip-text-color);
+	border-radius: var(--moderno-tooltip-border-radius);
+    box-shadow: var(--moderno-tooltip-box-shadow);
+	padding: var(--moderno-tooltip-padding);
+	font-family: var(--moderno-body-font-family);
+	font-size: var(--moderno-tooltip-font-size);
+	font-weight: var(--moderno-tooltip-font-weight);
+	margin-top: var(--moderno-tooltip-margin-top);
+	margin-left: var(--moderno-tooltip-margin-left);
+
+	max-width: 30%;
+	max-height: 80%;
+
+	visibility: hidden;
+	position: absolute;
+	overflow: auto;
+	z-index: 999;
+	opacity: 0;
+	transition: all 0.15s ease;
+	pointer-events: none;
+}
+
+.moderno-tooltip.active {
+	visibility: visible;
+	opacity: 1;
 }
 
 /*
@@ -322,6 +373,7 @@
 }
 
 .moderno-sorting-background-view {
+	font-family: var(--moderno-header-font-family);
 	position: fixed;
 	height: 100vh;
 	width: 100vw;
@@ -336,6 +388,7 @@
 }
 
 .moderno-sorting-view {
+	font-family: inherit;
 	position: absolute;
 	background: white;
 	border-radius: 10px;
