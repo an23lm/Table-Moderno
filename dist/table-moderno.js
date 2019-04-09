@@ -434,9 +434,9 @@ class TableModerno {
 	*/
 	getRowString(row, rowindex) {
 		var string = `<div class="moderno-table-row">`;
-		var clipClass = this.config.singleLineRows ? "clip" : "no-clip";
+		var clipClass = this.config.singleLineRows ? 'clip' : 'no-clip';
 		for(var i = 0; i < row.length; i++) {
-			string += `<div class="moderno-table-item ${clipClass}" id='moderno-table-${rowindex}-${i}' tooltip='${row[i]}' tooltip-persistent>${row[i]}</div>`;
+			string += `<div class='moderno-table-item ${clipClass}' id='moderno-table-${rowindex}-${i}'>${row[i]}</div>`;
 		}
 		string += `</div>`;
 		return string;
