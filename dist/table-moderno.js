@@ -20,6 +20,7 @@ class TableModerno {
 		this.setWidthByColumn(this.config.widthByColumn);
 
 		this.initLoadingIndicator();
+		this.initTooltip();
 		this.initSortingView();
 		
 		this.initHeaderDefaultEventResponders();
@@ -499,7 +500,12 @@ class TableModerno {
 	hideLoadingIndicator() {
 		$(`#${this.tableID} .moderno-loading-indicator`).animate({opacity: 0}, 200, () => {
 			$(`#${this.tableID} .moderno-loading-indicator`).css('display', 'none');
+			$(`#${this.tableID}.moderno-table-wrapper`).css('overflow-y', 'scroll');
 		});
+	}
+
+	initTooltip() {
+		$(`#${this.tableID} .moderno-table`).append(`<div class="moderno-tooltip"></div>`);
 	}
 
 	showTooltip() {

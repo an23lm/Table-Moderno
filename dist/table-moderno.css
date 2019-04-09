@@ -393,7 +393,7 @@
 	background: white;
 	border-radius: 10px;
 	min-width: 30%;
-	max-height: 95%;
+	max-height: 75%;
 }
 
 .moderno-sorting-view-title {
@@ -417,6 +417,7 @@
 	margin-right: 20pt;
 	margin-bottom: 8pt;
 	overflow-y: auto;
+	max-height: 50vh;
 }
 
 .moderno-sorting-item {
