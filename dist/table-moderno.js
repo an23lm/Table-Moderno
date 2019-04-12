@@ -571,7 +571,7 @@ class TableModerno {
 		this.consequence = callback;
 	}
 
-	registerCustomCellContent(generatecell, headerkey) {
+	registerCustomCellGenerator(generatecell, headerkey) {
 		this.customCells[headerkey] = {'generate': generatecell};
 	}
 }
