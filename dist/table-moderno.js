@@ -16,6 +16,8 @@ class TableModerno {
 	constructor(id, n_config) {
 		this.tableID = id;
 		this.config = {...TableModerno.default_config, ...n_config};
+		this.columnConditionalFormatting = {};
+		this.customCells = {};
 
 		this.setWidthByColumn(this.config.widthByColumn);
 
@@ -232,13 +234,15 @@ class TableModerno {
 	 * Close sorting view and save or cancel
 	 */
 	closeSortView(apply) {
+		this.showLoadingIndicator();
+		$(`#${this.tableID} .moderno-sorting-background-view`).animate({opacity: 0}, 200,() => {
+			$(`#${this.tableID} .moderno-sorting-background-view`).css('display', 'none');
+		});
 		if (apply === true) {
 			this.prevSortHeaderList = [...this.sortHeaderList];
 			this.prevSortHeaderDirection = Object.assign({}, this.sortHeaderDirection);
-			this.showLoadingIndicator();
 			if (this.sortHeaderList.length == 0) {
 				this.reloadTableWithData(this.prevTableData);
-				this.hideLoadingIndicator();
 			} else {
 				this.applySortList();
 			}
@@ -246,9 +250,7 @@ class TableModerno {
 			this.sortHeaderList = [...this.prevSortHeaderList];
 			this.sortHeaderDirection = Object.assign({}, this.prevSortHeaderDirection);
 		}
-		$(`#${this.tableID} .moderno-sorting-background-view`).animate({opacity: 0}, 200,() => {
-			$(`#${this.tableID} .moderno-sorting-background-view`).css('display', 'none');
-		});
+		this.hideLoadingIndicator();
 		return;
 	}
 
@@ -405,19 +407,11 @@ class TableModerno {
 		this.tableData = [...data];
 
 		var colKeys = this.getHeaderColumnDataKeys();
+		var clipClass = this.config.singleLineRows ? 'clip' : 'no-clip';
+
 		var dataString = "";
 		for (var i = 0; i < data.length; i++) {
-			var rowArr = [];
-			for (var  j = 0; j < colKeys.length; j++) {
-				var item = data[i][colKeys[j]];
-				if (item == undefined) {
-					console.warn(`Error finding key '${colKeys[j]}' in data at row with index ${i}`);
-					rowArr.push('N/A');
-				} else {
-					rowArr.push(item);
-				}
-			}
-			dataString += this.getRowString(rowArr, i);
+			dataString += this.getRowString(i, colKeys, clipClass);
 		}
 		$(`#${this.tableID} .moderno-table-body`).html(dataString);
 
@@ -433,11 +427,41 @@ class TableModerno {
 	 * @param {Object} row Object containing the information of row data
 	 * @returns {string} HTML string 
 	*/
-	getRowString(row, rowindex) {
-		var string = `<div class="moderno-table-row">`;
-		var clipClass = this.config.singleLineRows ? 'clip' : 'no-clip';
-		for(var i = 0; i < row.length; i++) {
-			string += `<div class='moderno-table-item ${clipClass}' id='moderno-table-${rowindex}-${i}'>${row[i]}</div>`;
+	getRowString(rowindex, colKeys, clipClass) {
+		var cellskeletions = {};
+		var conditions = {};
+		for (var  i = 0; i < colKeys.length; i++) {
+			var value = this.tableData[rowindex][colKeys[i]];	
+			var conditioncolor = '';
+			var condition = this.executeCondition(rowindex, colKeys[i]);
+			if (condition) {
+				var conditioncolor = `color: ${condition.highlightcolor};`;
+				conditions[condition.id] = condition.result;
+			}
+
+			var skel = { classes: `moderno-table-item ${clipClass}`, ids: `moderno-table-${rowindex}-${i}`, styles: conditioncolor, rawvalue: value, cellgenerator: undefined};
+			cellskeletions[colKeys[i]] = skel;
+		}
+
+		if (typeof(this.consequence) !== 'undefined') {
+			cellskeletions = this.consequence(rowindex, colKeys, conditions, cellskeletions);
+		}
+
+		var string = `<div class="moderno-table-row" id="moderno-table-row-${rowindex}">`;
+		for (var  i = 0; i < colKeys.length; i++) {
+			var cellcontent = '';
+			var value = cellskeletions[colKeys[i]]['rawvalue'];
+
+			if (cellskeletions[colKeys[i]].cellgenerator !== undefined) {
+				cellcontent = cellskeletions[colKeys[i]].cellgenerator(value);
+			} else if (value == undefined) {
+				console.warn(`Error finding key '${colKeys[i]}' in data at row with index ${rowindex}`);
+				cellcontent = this.customCells[colKeys[i]] == undefined ? '-' : this.customCells[colKeys[i]].generate(value);
+			} else {
+				cellcontent = this.customCells[colKeys[i]] == undefined ? value : this.customCells[colKeys[i]].generate(value);
+			}
+			
+			string += `<div class='${cellskeletions[colKeys[i]].classes}' id='${cellskeletions[colKeys[i]].ids}' style='${cellskeletions[colKeys[i]].styles}'>${cellcontent}</div>`;
 		}
 		string += `</div>`;
 		return string;
@@ -524,6 +548,31 @@ class TableModerno {
 				$(`#${this.tableID} .moderno-tooltip`).removeClass('active');
 			}
 		});
+	}
+
+	registerConditionOnColumn(id, condition, highlightColor, headerKey, callback = () => {}) {
+		this.columnConditionalFormatting[headerKey] = {id: id, condition: condition, highlightColor: highlightColor, callback: callback}
+	}
+
+	executeCondition(rowindex, headerKey) {
+		if (this.columnConditionalFormatting[headerKey] === undefined) {
+			return null;
+		}
+		if (this.columnConditionalFormatting[headerKey].condition(this.tableData[rowindex])) {
+			this.columnConditionalFormatting[headerKey].callback(true, rowindex, headerKey);
+			return {id: this.columnConditionalFormatting[headerKey].id, result: true, highlightcolor: this.columnConditionalFormatting[headerKey]['highlightColor']};
+		} else {
+			this.columnConditionalFormatting[headerKey].callback(false, rowindex, headerKey);
+			return {id: this.columnConditionalFormatting[headerKey].id, result: false, highlightcolor: ''};;
+		}
+	}
+
+	registerConsequence(callback = ()=>{}) {
+		this.consequence = callback;
+	}
+
+	registerCustomCellContent(generatecell, headerkey) {
+		this.customCells[headerkey] = {'generate': generatecell};
 	}
 }
 
