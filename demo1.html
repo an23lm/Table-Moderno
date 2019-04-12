@@ -71,7 +71,7 @@
 			return row.prof != undefined && row.prof.length > 5 ? true : false;
 		}, 'red!important', 'prof');
 	
-		moderno.registerCustomCellContent(function(value) {
+		moderno.registerCustomCellGenerator(function(value) {
 			if (value == undefined) {
 				value = '-';
 			}
