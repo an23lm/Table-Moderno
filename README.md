@@ -103,8 +103,8 @@ Create a `div` with the class `moderno-table-wrapper` with a unique `id` followi
 ### CSS
 ```css
 #table1 {
-    height: 80vh; //or whatever you want :)
-    width: 50vw;
+    height: /* height of your table */;
+    width: /* width of your table */;
 }
 ```
 
