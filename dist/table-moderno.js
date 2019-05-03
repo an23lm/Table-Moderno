@@ -4,585 +4,872 @@
  * Email: anselmjosephs@gmail.com
  * License: GNU GPLv3
  * Version: v1.2.1
-*/
+ */
 /// Table Moderno Class
 class TableModerno {
+  /**
+   * Init the table.
+   * @param {string} id - id of div with class moderno-table-wrapper to create table on
+   * @param {Object} n_config - User configuration for table, refer `TableModerno.default_config` for default config
+   */
+  constructor(id, n_config) {
+    this.tableID = id;
+    this.config = { ...TableModerno.default_config, ...n_config };
+    this.columnConditionalFormatting = {};
+    this.customCells = {};
 
-	/**
-	 * Init the table.
-	 * @param {string} id - id of div with class moderno-table-wrapper to create table on
-	 * @param {Object} n_config - User configuration for table, refer `TableModerno.default_config` for default config
-	*/
-	constructor(id, n_config) {
-		this.tableID = id;
-		this.config = {...TableModerno.default_config, ...n_config};
-		this.columnConditionalFormatting = {};
-		this.customCells = {};
+    this.setWidthByColumn(this.config.widthByColumn);
 
-		this.setWidthByColumn(this.config.widthByColumn);
+    this.initLoadingIndicator();
+    this.initTooltip();
+    this.initSortingView();
+    if (this.config.highlightHeaderColor == true) {
+      this.initHeaderDefaultEventResponders();
+    }
+    if (this.config.highlightBodyColor == true) {
+      this.initBodyDefaultEventResponders();
+    }
 
-		this.initLoadingIndicator();
-		this.initTooltip();
-		this.initSortingView();
-		
-		this.initHeaderDefaultEventResponders();
-		this.initBodyDefaultEventResponders();
-		
-		this.setScrollBarType(this.config.scrollBarType);
-		
-		this.toggleStickyHeader(this.config.stickHeader);
-		this.registerStickyColumnsLeft(this.config.stickColumnsLeft);
-		this.registerStickyColumnsRight(this.config.stickColumnsRight);
+    this.setScrollBarType(this.config.scrollBarType);
 
-		this.showTooltip();
-	}
+    this.toggleStickyHeader(this.config.stickHeader);
+    this.registerStickyColumnsLeft(this.config.stickColumnsLeft);
+    this.registerStickyColumnsRight(this.config.stickColumnsRight);
+    if (this.config.tooltip == true) {
+      this.showTooltip();
+    }
+  }
 
-	/**
-	 * Register `hover` and `click` events on `moderno-table-header`s `moderno-table-item`s
-	*/
-	initHeaderDefaultEventResponders() {
-		var tableID = this.tableID;
-		$(`#${this.tableID} .moderno-table-header .moderno-table-item`).hover(
-			function() {
-				var n = $(this).index() + 1;
-				$(this).addClass('hover');
-				$(`#${tableID} .moderno-table-body .moderno-table-row .moderno-table-item:nth-child(${n})`).addClass('hover');
-			},
-			function() {
-				var n = $(this).index() + 1;
-				$(this).removeClass('hover');
-				$(`#${tableID} .moderno-table-body .moderno-table-row .moderno-table-item:nth-child(${n})`).removeClass('hover');
-			}
-		);
+  /**
+   * Register `hover` and `click` events on `moderno-table-header`s `moderno-table-item`s
+   */
+  initHeaderDefaultEventResponders() {
+    var tableID = this.tableID;
+    $(`#${this.tableID} .moderno-table-header .moderno-table-item`).hover(
+      function() {
+        var n = $(this).index() + 1;
+        $(this).addClass("hover");
+        $(
+          `#${tableID} .moderno-table-body .moderno-table-row .moderno-table-item:nth-child(${n})`
+        ).addClass("hover");
+      },
+      function() {
+        var n = $(this).index() + 1;
+        $(this).removeClass("hover");
+        $(
+          `#${tableID} .moderno-table-body .moderno-table-row .moderno-table-item:nth-child(${n})`
+        ).removeClass("hover");
+      }
+    );
 
-		$(`#${this.tableID} .moderno-table-header .moderno-table-item`).click(
-			function() {
-				var n = $(this).index() + 1;
-				$(this).toggleClass('highlight');
-				$(`#${tableID} .moderno-table-body .moderno-table-row .moderno-table-item:nth-child(${n})`).toggleClass('highlight');
-			}
-		);
-	}
+    $(`#${this.tableID} .moderno-table-header .moderno-table-item`).click(
+      function() {
+        var n = $(this).index() + 1;
+        $(this).toggleClass("highlight");
+        $(
+          `#${tableID} .moderno-table-body .moderno-table-row .moderno-table-item:nth-child(${n})`
+        ).toggleClass("highlight");
+      }
+    );
+  }
 
-	/**
-	 * Init loading indicator
-	 */
-	initLoadingIndicator() {
-		$(`#${this.tableID} .moderno-table`).append(`<div class="moderno-loading-indicator"></div>`);
-	}
+  /**
+   * Init loading indicator
+   */
+  initLoadingIndicator() {
+    $(`#${this.tableID} .moderno-table`).append(
+      `<div class="moderno-loading-indicator"></div>`
+    );
+  }
 
-	/**
-	 * Init sorting view
-	 */
-	initSortingView() {
-		this.sortHeaderList = [];
-		this.sortHeaderDirection = {};
+  /**
+   * Init sorting view
+   */
+  initSortingView() {
+    this.sortHeaderList = [];
+    this.sortHeaderDirection = {};
 
-		this.prevSortHeaderList = [];
-		this.prevSortHeaderDirection = {};
+    this.prevSortHeaderList = [];
+    this.prevSortHeaderDirection = {};
 
-		var items = $(`#${this.tableID} .moderno-table-header .moderno-table-row:first-child .moderno-table-item`);
-		var itemshtml = "";
-		for (var i = 0; i < items.length; i++) {
-			itemshtml += `
-						<div class="moderno-sorting-item" data-key="${$(items[i]).attr('data-key')}">
-							<div class="moderno-sorting-order-number"></div>
-							<label class="pure-material-checkbox moderno-sorting-item-checkbox">
-								<input type="checkbox" data-key="${$(items[i]).attr('data-key')}">
-								<span>${$(items[i]).html().replace(/<(?:.|\n)*?>/gm, '')}</span>
-							</label>
-							<button class="sort-button-wrapper sort-up" data-direction="up" onclick="event.stopPropagation();"><img class="ass-img"/></button>
-							<button class="sort-button-wrapper sort-down" data-direction="down" onclick="event.stopPropagation();"><img class="dec-img"/></button>
-						</div>`;
-		}
+    var items = $(
+      `#${
+        this.tableID
+      } .moderno-table-header .moderno-table-row:first-child .moderno-table-item`
+    );
+    var itemshtml = "";
+    for (var i = 0; i < items.length; i++) {
+      itemshtml += `
+						  <div class="moderno-sorting-item" data-key="${$(items[i]).attr("data-key")}">
+							  <div class="moderno-sorting-order-number"></div>
+							  <label class="pure-material-checkbox moderno-sorting-item-checkbox">
+								  <input type="checkbox" data-key="${$(items[i]).attr("data-key")}">
+								  <span>${$(items[i])
+                    .html()
+                    .replace(/<(?:.|\n)*?>/gm, "")}</span>
+							  </label>
+							  <button class="sort-button-wrapper sort-up" data-direction="up" onclick="event.stopPropagation();"><img class="ass-img"/></button>
+							  <button class="sort-button-wrapper sort-down" data-direction="down" onclick="event.stopPropagation();"><img class="dec-img"/></button>
+						  </div>`;
+    }
 
-		$(`#${this.tableID} .moderno-table`).append(`
-			<div class="moderno-sorting-background-view">
-				<div class="moderno-sorting-view">
-					<div class="moderno-sorting-view-title"><span>Sort by</span></div>
-					<div class="moderno-sorting-items">${itemshtml}</div>
-					<div class="moderno-sorting-footer"><input class="cancel-button" type='button' value='Cancel'><input class="apply-button" type='button' value='Apply'></div></div>
-				</div>
-			</div>`);
-		
-		$(`#${this.tableID} .moderno-table .moderno-sorting-view .moderno-sorting-item input`).on('change', (event) => { this.addToSortList(event.currentTarget); });
-		$(`#${this.tableID} .moderno-table .moderno-sorting-view .moderno-sorting-item .sort-button-wrapper`).on('click', (event) => { this.setSortDirection(event.currentTarget); });
-		$(`#${this.tableID} .moderno-table .moderno-sorting-view .cancel-button`).on('click', () => { this.closeSortView.call(this, false);});
-		$(`#${this.tableID} .moderno-table .moderno-sorting-view .apply-button`).on('click', () => { this.closeSortView.call(this, true);});
-	}
+    $(`#${this.tableID} .moderno-table`).append(`
+			  <div class="moderno-sorting-background-view">
+				  <div class="moderno-sorting-view">
+					  <div class="moderno-sorting-view-title"><span>Sort by</span></div>
+					  <div class="moderno-sorting-items">${itemshtml}</div>
+					  <div class="moderno-sorting-footer"><input class="cancel-button" type='button' value='Cancel'><input class="apply-button" type='button' value='Apply'></div></div>
+				  </div>
+			  </div>`);
 
-	/**
-	 * Register `hover` and `click` events on `moderno-table-body`s `moderno-table-row`s
-	*/
-	initBodyDefaultEventResponders() {
-		$(`#${this.tableID} .moderno-table-body`).on({
-			mouseenter: function() {
-				$(this).addClass('hover');
-			},
-			mouseleave: function() {
-				$(this).removeClass('hover');
-			},
-		}, '.moderno-table-row');
+    $(
+      `#${
+        this.tableID
+      } .moderno-table .moderno-sorting-view .moderno-sorting-item input`
+    ).on("change", event => {
+      this.addToSortList(event.currentTarget);
+    });
+    $(
+      `#${
+        this.tableID
+      } .moderno-table .moderno-sorting-view .moderno-sorting-item .sort-button-wrapper`
+    ).on("click", event => {
+      this.setSortDirection(event.currentTarget);
+    });
+    $(
+      `#${this.tableID} .moderno-table .moderno-sorting-view .cancel-button`
+    ).on("click", () => {
+      this.closeSortView.call(this, false);
+    });
+    $(`#${this.tableID} .moderno-table .moderno-sorting-view .apply-button`).on(
+      "click",
+      () => {
+        this.closeSortView.call(this, true);
+      }
+    );
+  }
 
-		$(`#${this.tableID} .moderno-table-body`).on('click', '.moderno-table-row',
-			function() {
-				$(this).toggleClass('highlight');
-			}
-		);
-	}
+  /**
+   * Register `hover` and `click` events on `moderno-table-body`s `moderno-table-row`s
+   */
+  initBodyDefaultEventResponders() {
+    $(`#${this.tableID} .moderno-table-body`).on(
+      {
+        mouseenter: function() {
+          $(this).addClass("hover");
+        },
+        mouseleave: function() {
+          $(this).removeClass("hover");
+        }
+      },
+      ".moderno-table-row"
+    );
 
-	/**
-	 * Set table's scroll bar type
-	 * @param {string} type can either be 'always' or 'default'
-	*/
-	setScrollBarType(type) {
-		if (type == 'always') {
-			$(`#${this.tableID}.moderno-table-wrapper`).addClass('show-scroll-bar');
-		}
-	}
+    $(`#${this.tableID} .moderno-table-body`).on(
+      "click",
+      ".moderno-table-row",
+      function() {
+        $(this).toggleClass("highlight");
+      }
+    );
+  }
 
-	/**
-	 * Toggle sticky header
-	 * @param {boolean} flag to toggle on or off sticky header
-	*/
-	toggleStickyHeader(flag) {
-		if (flag) {
-			$(`#${this.tableID} .moderno-table-header`).addClass('sticky');
-		} else {
-			$(`#${this.tableID} .moderno-table-header`).removeClass('sticky');
-		}
-	}
+  /**
+   * Set table's scroll bar type
+   * @param {string} type can either be 'always' or 'default'
+   */
+  setScrollBarType(type) {
+    if (type == "always") {
+      $(`#${this.tableID}.moderno-table-wrapper`).addClass("show-scroll-bar");
+    }
+  }
 
-	/**
-	 * Register the columns to stick to the left and register scroll responder.
-	 * @param {Array(int)} columns to toggle on or off sticky columns
-	*/
-	registerStickyColumnsLeft(columns) {
-		columns.sort();
-		var maxLeft = 0;
-		var items = $(`#${this.tableID} .moderno-table-header .moderno-table-row:first-child .moderno-table-item`);
-		var columnsCounter = 0;
+  /**
+   * Toggle sticky header
+   * @param {boolean} flag to toggle on or off sticky header
+   */
+  toggleStickyHeader(flag) {
+    if (flag) {
+      $(`#${this.tableID} .moderno-table-header`).addClass("sticky");
+    } else {
+      $(`#${this.tableID} .moderno-table-header`).removeClass("sticky");
+    }
+  }
 
-		for (var i = 0; i < items.length; i++) {
-			if (columns[columnsCounter] - 1 == i) {
-				$(`#${this.tableID}.moderno-table-wrapper`).on('scroll', {left: maxLeft, itemIndex: i + 1, tableID: this.tableID}, this.scrollEventResponderOnLeft);
+  /**
+   * Register the columns to stick to the left and register scroll responder.
+   * @param {Array(int)} columns to toggle on or off sticky columns
+   */
+  registerStickyColumnsLeft(columns) {
+    columns.sort();
+    var maxLeft = 0;
+    var items = $(
+      `#${
+        this.tableID
+      } .moderno-table-header .moderno-table-row:first-child .moderno-table-item`
+    );
+    var columnsCounter = 0;
 
-				$(`#${this.tableID} .moderno-table-header .moderno-table-row .moderno-table-item:nth-child(${columns[columnsCounter]})`).css('left', maxLeft+'px');
-				$(`#${this.tableID} .moderno-table-body .moderno-table-row .moderno-table-item:nth-child(${columns[columnsCounter]})`).css('left', maxLeft+'px');
+    for (var i = 0; i < items.length; i++) {
+      if (columns[columnsCounter] - 1 == i) {
+        $(`#${this.tableID}.moderno-table-wrapper`).on(
+          "scroll",
+          { left: maxLeft, itemIndex: i + 1, tableID: this.tableID },
+          this.scrollEventResponderOnLeft
+        );
 
-				maxLeft += $(`#${this.tableID} .moderno-table-header .moderno-table-row .moderno-table-item:nth-child(${i + 1})`).outerWidth() - 1;
-				columnsCounter += 1;
-			}
-		}
-	}
+        $(
+          `#${
+            this.tableID
+          } .moderno-table-header .moderno-table-row .moderno-table-item:nth-child(${
+            columns[columnsCounter]
+          })`
+        ).css("left", maxLeft + "px");
+        $(
+          `#${
+            this.tableID
+          } .moderno-table-body .moderno-table-row .moderno-table-item:nth-child(${
+            columns[columnsCounter]
+          })`
+        ).css("left", maxLeft + "px");
 
-	/**
-	 * Register the columns to stick to the right and register scroll responder.
-	 * @param {Array(number)} columns to toggle on or off sticky columns
-	*/
-	registerStickyColumnsRight(columns) {
-		columns.sort(function(a, b){return b-a});
-		var maxRight = 0;
-		var items = $(`#${this.tableID} .moderno-table-header .moderno-table-row:first-child .moderno-table-item`);
-		var columnsCounter = 0;
+        maxLeft +=
+          $(
+            `#${
+              this.tableID
+            } .moderno-table-header .moderno-table-row .moderno-table-item:nth-child(${i +
+              1})`
+          ).outerWidth() - 1;
+        columnsCounter += 1;
+      }
+    }
+  }
 
-		for (var i = items.length - 1; i >= 0; i--) {
-			if (columns[columnsCounter] - 1 == i) {
-				$(`#${this.tableID}.moderno-table-wrapper`).on("scroll", {right: maxRight, itemIndex: i + 1, tableID: this.tableID}, this.scrollEventResponderOnRight);
+  /**
+   * Register the columns to stick to the right and register scroll responder.
+   * @param {Array(number)} columns to toggle on or off sticky columns
+   */
+  registerStickyColumnsRight(columns) {
+    columns.sort(function(a, b) {
+      return b - a;
+    });
+    var maxRight = 0;
+    var items = $(
+      `#${
+        this.tableID
+      } .moderno-table-header .moderno-table-row:first-child .moderno-table-item`
+    );
+    var columnsCounter = 0;
 
-				$(`#${this.tableID} .moderno-table-header .moderno-table-row .moderno-table-item:nth-child(${columns[columnsCounter]})`).css('right', maxRight+'px');
-				$(`#${this.tableID} .moderno-table-body .moderno-table-row .moderno-table-item:nth-child(${columns[columnsCounter]})`).css('right', maxRight+'px');
+    for (var i = items.length - 1; i >= 0; i--) {
+      if (columns[columnsCounter] - 1 == i) {
+        $(`#${this.tableID}.moderno-table-wrapper`).on(
+          "scroll",
+          { right: maxRight, itemIndex: i + 1, tableID: this.tableID },
+          this.scrollEventResponderOnRight
+        );
 
-				columnsCounter += 1;
-				maxRight += $(`#${this.tableID} .moderno-table-header .moderno-table-row .moderno-table-item:nth-child(${i + 1})`).outerWidth() - columnsCounter;
-			}
-		}
-		$(`#${this.tableID}.moderno-table-wrapper`).scroll();
-	}
+        $(
+          `#${
+            this.tableID
+          } .moderno-table-header .moderno-table-row .moderno-table-item:nth-child(${
+            columns[columnsCounter]
+          })`
+        ).css("right", maxRight + "px");
+        $(
+          `#${
+            this.tableID
+          } .moderno-table-body .moderno-table-row .moderno-table-item:nth-child(${
+            columns[columnsCounter]
+          })`
+        ).css("right", maxRight + "px");
 
-	/**
-	 * Open sorting view
-	 */
-	openSortView() {
-		this.prevSortHeaderList = [...this.sortHeaderList];
-		this.prevSortHeaderDirection = Object.assign({}, this.sortHeaderDirection);
+        columnsCounter += 1;
+        maxRight +=
+          $(
+            `#${
+              this.tableID
+            } .moderno-table-header .moderno-table-row .moderno-table-item:nth-child(${i +
+              1})`
+          ).outerWidth() - columnsCounter;
+      }
+    }
+    $(`#${this.tableID}.moderno-table-wrapper`).scroll();
+  }
 
-		var items = $(`#${this.tableID} .moderno-table .moderno-sorting-view .moderno-sorting-item`);
-		for (var i = 0; i < items.length; i++) {
-			var headerKey = $(items[i]).attr('data-key');
-			var index = this.sortHeaderList.indexOf(headerKey);
-			if (index > -1) {
-				$($(items[i]).children('.moderno-sorting-order-number')[0]).html(index + 1);
-				$($(items[i]).children('.moderno-sorting-item-checkbox').children('input')[0]).prop("checked", true);
-				var sortUp = this.sortHeaderDirection[headerKey];
-				if (!sortUp) {
-					$($(items[i]).children('sort-down')).click();
-				} else {
-					$($(items[i]).children('sort-up')).click();
-				}
-			} else {
-				$($(items[i]).children('.moderno-sorting-order-number')[0]).html('');
-				$($(items[i]).children('.moderno-sorting-item-checkbox').children('input')[0]).prop("checked", false);
-				$(items[i]).children('.sort-button-wrapper').removeClass('active');
-			}
-		}
-		$(`#${this.tableID} .moderno-sorting-background-view`).css('opacity', 0).css('display', 'flex');
-		$(`#${this.tableID} .moderno-sorting-background-view`).animate({opacity: 1}, 200);
-	}
+  /**
+   * Open sorting view
+   */
+  openSortView() {
+    this.prevSortHeaderList = [...this.sortHeaderList];
+    this.prevSortHeaderDirection = Object.assign({}, this.sortHeaderDirection);
 
-	/**
-	 * Close sorting view and save or cancel
-	 */
-	closeSortView(apply) {
-		this.showLoadingIndicator();
-		$(`#${this.tableID} .moderno-sorting-background-view`).animate({opacity: 0}, 200,() => {
-			$(`#${this.tableID} .moderno-sorting-background-view`).css('display', 'none');
-		});
-		if (apply === true) {
-			this.prevSortHeaderList = [...this.sortHeaderList];
-			this.prevSortHeaderDirection = Object.assign({}, this.sortHeaderDirection);
-			if (this.sortHeaderList.length == 0) {
-				this.reloadTableWithData(this.prevTableData);
-			} else {
-				this.applySortList();
-			}
-		} else if (apply === false) {
-			this.sortHeaderList = [...this.prevSortHeaderList];
-			this.sortHeaderDirection = Object.assign({}, this.prevSortHeaderDirection);
-		}
-		this.hideLoadingIndicator();
-		return;
-	}
+    var items = $(
+      `#${
+        this.tableID
+      } .moderno-table .moderno-sorting-view .moderno-sorting-item`
+    );
+    for (var i = 0; i < items.length; i++) {
+      var headerKey = $(items[i]).attr("data-key");
+      var index = this.sortHeaderList.indexOf(headerKey);
+      if (index > -1) {
+        $($(items[i]).children(".moderno-sorting-order-number")[0]).html(
+          index + 1
+        );
+        $(
+          $(items[i])
+            .children(".moderno-sorting-item-checkbox")
+            .children("input")[0]
+        ).prop("checked", true);
+        var sortUp = this.sortHeaderDirection[headerKey];
+        if (!sortUp) {
+          $($(items[i]).children("sort-down")).click();
+        } else {
+          $($(items[i]).children("sort-up")).click();
+        }
+      } else {
+        $($(items[i]).children(".moderno-sorting-order-number")[0]).html("");
+        $(
+          $(items[i])
+            .children(".moderno-sorting-item-checkbox")
+            .children("input")[0]
+        ).prop("checked", false);
+        $(items[i])
+          .children(".sort-button-wrapper")
+          .removeClass("active");
+      }
+    }
+    $(`#${this.tableID} .moderno-sorting-background-view`)
+      .css("opacity", 0)
+      .css("display", "flex");
+    $(`#${this.tableID} .moderno-sorting-background-view`).animate(
+      { opacity: 1 },
+      200
+    );
+  }
 
-	/**
-	 * Add a header to the sort list
-	 */
-	addToSortList(target) {
-		var selected = $(target).is(":checked");
-		var headerKey = $(target).attr("data-key");
-		if (selected) {
-			this.sortHeaderList.push(headerKey);
-			var upButton = $(target).parent().parent().children()[2];
-			var orderNumber = $(target).parent().parent().children('.moderno-sorting-order-number')[0];
-			$(orderNumber).html(this.sortHeaderList.length);
-			this.setSortDirection(upButton);
-		} else {
-			var index = this.sortHeaderList.indexOf(headerKey);
-			if (index > -1) {
-				this.sortHeaderList.splice(index, 1);
-			}
-			var orderNumber = $(target).parent().parent().children('.moderno-sorting-order-number')[0];
-			$(orderNumber).html('');
-			$(target).parent().parent().children(".active").removeClass("active");
-		}
-	}
+  /**
+   * Close sorting view and save or cancel
+   */
+  closeSortView(apply) {
+    this.showLoadingIndicator();
+    $(`#${this.tableID} .moderno-sorting-background-view`).animate(
+      { opacity: 0 },
+      200,
+      () => {
+        $(`#${this.tableID} .moderno-sorting-background-view`).css(
+          "display",
+          "none"
+        );
+      }
+    );
+    if (apply === true) {
+      this.prevSortHeaderList = [...this.sortHeaderList];
+      this.prevSortHeaderDirection = Object.assign(
+        {},
+        this.sortHeaderDirection
+      );
+      if (this.sortHeaderList.length == 0) {
+        this.reloadTableWithData(this.prevTableData);
+      } else {
+        this.applySortList();
+      }
+    } else if (apply === false) {
+      this.sortHeaderList = [...this.prevSortHeaderList];
+      this.sortHeaderDirection = Object.assign(
+        {},
+        this.prevSortHeaderDirection
+      );
+    }
+    this.hideLoadingIndicator();
+    return;
+  }
 
-	/**
-	 * Select sort type for header 
-	 */
-	setSortDirection(target) {
-		var inputItem = $(target).parent().children('.moderno-sorting-item-checkbox').children('input')[0];
-		var selected = $(inputItem).is(":checked");
-		if (selected) {
-			var sortUp = $(target).attr('data-direction') === 'up';
-			var headerKey = $(target).parent().attr("data-key");
-			this.sortHeaderDirection[headerKey] = sortUp;
-			$(target).parent().children(".active").removeClass("active");
-			$(target).addClass('active');
-		}
-	}
+  /**
+   * Add a header to the sort list
+   */
+  addToSortList(target) {
+    var selected = $(target).is(":checked");
+    var headerKey = $(target).attr("data-key");
+    if (selected) {
+      this.sortHeaderList.push(headerKey);
+      var upButton = $(target)
+        .parent()
+        .parent()
+        .children()[2];
+      var orderNumber = $(target)
+        .parent()
+        .parent()
+        .children(".moderno-sorting-order-number")[0];
+      $(orderNumber).html(this.sortHeaderList.length);
+      this.setSortDirection(upButton);
+    } else {
+      var index = this.sortHeaderList.indexOf(headerKey);
+      if (index > -1) {
+        this.sortHeaderList.splice(index, 1);
+      }
+      var orderNumber = $(target)
+        .parent()
+        .parent()
+        .children(".moderno-sorting-order-number")[0];
+      $(orderNumber).html("");
+      $(target)
+        .parent()
+        .parent()
+        .children(".active")
+        .removeClass("active");
+    }
+  }
 
-	/**
-	 * Apply the sort list
-	 */
-	applySortList() {
-		var sortPromises = [];
-		for (var i = 0; i < this.sortHeaderList.length; i++) {
-			sortPromises.push(this.sort(this.sortHeaderList[i]));
-		}
+  /**
+   * Select sort type for header
+   */
+  setSortDirection(target) {
+    var inputItem = $(target)
+      .parent()
+      .children(".moderno-sorting-item-checkbox")
+      .children("input")[0];
+    var selected = $(inputItem).is(":checked");
+    if (selected) {
+      var sortUp = $(target).attr("data-direction") === "up";
+      var headerKey = $(target)
+        .parent()
+        .attr("data-key");
+      this.sortHeaderDirection[headerKey] = sortUp;
+      $(target)
+        .parent()
+        .children(".active")
+        .removeClass("active");
+      $(target).addClass("active");
+    }
+  }
 
-		Promise.all(sortPromises).then(() => {
-			this.reloadTableWithData(this.tableData);
-			this.hideLoadingIndicator();
-		});
-	}
+  /**
+   * Apply the sort list
+   */
+  applySortList() {
+    var sortPromises = [];
+    for (var i = 0; i < this.sortHeaderList.length; i++) {
+      sortPromises.push(this.sort(this.sortHeaderList[i]));
+    }
 
-	/**
-	 * Sort by header
-	 */
-	sort(key) {
-		return new Promise((resolve, reject) => {
-			var sortUp = this.sortHeaderDirection[key];
-			if (!sortUp) {
-				this.tableData.sort(function(a, b) {
-					var x = a[key]; var y = b[key];
-					return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-				});
-			} else {
-				this.tableData.sort(function(a, b) {
-					var x = a[key]; var y = b[key];
-					return ((x > y) ? -1 : ((x < y) ? 1 : 0));
-				});
-			}
-			resolve();
-		});
-	}
-	
+    Promise.all(sortPromises).then(() => {
+      this.reloadTableWithData(this.tableData);
+      this.hideLoadingIndicator();
+    });
+  }
 
-	/**
-	 * Handler for scroll left on table wrapper. Registered left sticky elements will be toggled to `postition: sticky` when appropriate.
-	 * @param {Object} event Scroll event
-	 */
-	scrollEventResponderOnLeft(event) {
-		var stickyoffset = event.data.left;
-		var index = event.data.itemIndex;
-		var tableID = event.data.tableID;
+  /**
+   * Sort by header
+   */
+  sort(key) {
+    return new Promise((resolve, reject) => {
+      var sortUp = this.sortHeaderDirection[key];
+      if (!sortUp) {
+        this.tableData.sort(function(a, b) {
+          var x = a[key];
+          var y = b[key];
+          return x < y ? -1 : x > y ? 1 : 0;
+        });
+      } else {
+        this.tableData.sort(function(a, b) {
+          var x = a[key];
+          var y = b[key];
+          return x > y ? -1 : x < y ? 1 : 0;
+        });
+      }
+      resolve();
+    });
+  }
 
-		var header = $(`#${tableID} .moderno-table-header .moderno-table-row .moderno-table-item:nth-child(${index})`);
-		var body = $(`#${tableID} .moderno-table-body .moderno-table-row .moderno-table-item:nth-child(${index})`)
-		var childPos = header.offset().left;
-		var parentPos = $(`#${tableID}.moderno-table-wrapper`).offset().left;
-		var offset = childPos - parentPos;
+  /**
+   * Handler for scroll left on table wrapper. Registered left sticky elements will be toggled to `postition: sticky` when appropriate.
+   * @param {Object} event Scroll event
+   */
+  scrollEventResponderOnLeft(event) {
+    var stickyoffset = event.data.left;
+    var index = event.data.itemIndex;
+    var tableID = event.data.tableID;
 
-		if (offset <= stickyoffset) {
-			header.addClass("sticky");
-			body.addClass("sticky");
-		} else {
-			header.removeClass("sticky");
-			body.removeClass("sticky");
-		}
-	}
+    var header = $(
+      `#${tableID} .moderno-table-header .moderno-table-row .moderno-table-item:nth-child(${index})`
+    );
+    var body = $(
+      `#${tableID} .moderno-table-body .moderno-table-row .moderno-table-item:nth-child(${index})`
+    );
+    var childPos = header.offset().left;
+    var parentPos = $(`#${tableID}.moderno-table-wrapper`).offset().left;
+    var offset = childPos - parentPos;
 
-	/**
-	 * Handler for scroll right on table wrapper. Registered right sticky elements will be toggled to `postition: sticky` when appropriate.
-	 * @param {Object} event Scroll event
-	 */
-	scrollEventResponderOnRight(event) {
-		var stickyoffset = event.data.right;
-		var index = event.data.itemIndex;
-		var tableID = event.data.tableID;
+    if (offset <= stickyoffset) {
+      header.addClass("sticky");
+      body.addClass("sticky");
+    } else {
+      header.removeClass("sticky");
+      body.removeClass("sticky");
+    }
+  }
 
-		var header = $(`#${tableID} .moderno-table-header .moderno-table-row .moderno-table-item:nth-child(${index})`);
-		var body = $(`#${tableID} .moderno-table-body .moderno-table-row .moderno-table-item:nth-child(${index})`)
-		var childPos = header.offset().left + header.outerWidth();
-		var parentPos = $(`#${tableID}.moderno-table-wrapper`).offset().left + $(`#${tableID}.moderno-table-wrapper`).width(); 
-		var offset = childPos - parentPos;
-		var diff = offset + stickyoffset;
-		
-		if (diff < -2) {
-			header.removeClass("sticky");
-			body.removeClass("sticky");
-		} else {
-			header.addClass("sticky");
-			body.addClass("sticky");
-		}
-	}
+  /**
+   * Handler for scroll right on table wrapper. Registered right sticky elements will be toggled to `postition: sticky` when appropriate.
+   * @param {Object} event Scroll event
+   */
+  scrollEventResponderOnRight(event) {
+    var stickyoffset = event.data.right;
+    var index = event.data.itemIndex;
+    var tableID = event.data.tableID;
 
-	/**
-	 * Set the widths of existing `.moderno-table-items` elements
-	 * @param {Array(number)} widths Array of widths of columns from left to right, if not sepecified, default width will be applied
-	*/
-	setWidthByColumn(widths) {
-		var tableExpectedLength = -1;
-		var items = $(`#${this.tableID} .moderno-table-header .moderno-table-row:first-child .moderno-table-item`);
-		for (var i = 0; i < items.length; i++) {
-			if (i < widths.length) {
-				$(`#${this.tableID} .moderno-table .moderno-table-header .moderno-table-item:nth-child(${i + 1})`).width(widths[i]);
-				$(`#${this.tableID} .moderno-table .moderno-table-body .moderno-table-item:nth-child(${i + 1})`).width(widths[i]);
-			} else {
-				$(`#${this.tableID} .moderno-table .moderno-table-header .moderno-table-item:nth-child(${i + 1})`).width(this.config.defaultWidth);
-				$(`#${this.tableID} .moderno-table .moderno-table-body .moderno-table-item:nth-child(${i + 1})`).width(this.config.defaultWidth);
-			}
-			tableExpectedLength += $(`#${this.tableID} .moderno-table .moderno-table-header .moderno-table-item:nth-child(${i + 1})`).outerWidth() - 1; // -1 because of the `margin-right: -1px` on table item
-		}
-		$(`#${this.tableID} .moderno-table`).width(tableExpectedLength);
-	}
+    var header = $(
+      `#${tableID} .moderno-table-header .moderno-table-row .moderno-table-item:nth-child(${index})`
+    );
+    var body = $(
+      `#${tableID} .moderno-table-body .moderno-table-row .moderno-table-item:nth-child(${index})`
+    );
+    var childPos = header.offset().left + header.outerWidth();
+    var parentPos =
+      $(`#${tableID}.moderno-table-wrapper`).offset().left +
+      $(`#${tableID}.moderno-table-wrapper`).width();
+    var offset = childPos - parentPos;
+    var diff = offset + stickyoffset;
 
-	/**
-	 * Reload table with new data and re-set widths for new items
-	 * @param {Object} data New data to load the table with
-	*/
-	reloadTableWithData(data) {
-		this.prevTableData = [...data];
-		this.tableData = [...data];
+    if (diff < -2) {
+      header.removeClass("sticky");
+      body.removeClass("sticky");
+    } else {
+      header.addClass("sticky");
+      body.addClass("sticky");
+    }
+  }
 
-		var colKeys = this.getHeaderColumnDataKeys();
-		var clipClass = this.config.singleLineRows ? 'clip' : 'no-clip';
+  /**
+   * Set the widths of existing `.moderno-table-items` elements
+   * @param {Array(number)} widths Array of widths of columns from left to right, if not sepecified, default width will be applied
+   */
+  setWidthByColumn(widths) {
+    var tableExpectedLength = -1;
+    var items = $(
+      `#${
+        this.tableID
+      } .moderno-table-header .moderno-table-row:first-child .moderno-table-item`
+    );
+    for (var i = 0; i < items.length; i++) {
+      if (i < widths.length) {
+        $(
+          `#${
+            this.tableID
+          } .moderno-table .moderno-table-header .moderno-table-item:nth-child(${i +
+            1})`
+        ).width(widths[i]);
+        $(
+          `#${
+            this.tableID
+          } .moderno-table .moderno-table-body .moderno-table-item:nth-child(${i +
+            1})`
+        ).width(widths[i]);
+      } else {
+        $(
+          `#${
+            this.tableID
+          } .moderno-table .moderno-table-header .moderno-table-item:nth-child(${i +
+            1})`
+        ).width(this.config.defaultWidth);
+        $(
+          `#${
+            this.tableID
+          } .moderno-table .moderno-table-body .moderno-table-item:nth-child(${i +
+            1})`
+        ).width(this.config.defaultWidth);
+      }
+      tableExpectedLength +=
+        $(
+          `#${
+            this.tableID
+          } .moderno-table .moderno-table-header .moderno-table-item:nth-child(${i +
+            1})`
+        ).outerWidth() - 1; // -1 because of the `margin-right: -1px` on table item
+    }
+    $(`#${this.tableID} .moderno-table`).width(tableExpectedLength);
+  }
 
-		var dataString = "";
-		for (var i = 0; i < data.length; i++) {
-			dataString += this.getRowString(i, colKeys, clipClass);
-		}
-		$(`#${this.tableID} .moderno-table-body`).html(dataString);
+  /**
+   * Reload table with new data and re-set widths for new items
+   * @param {Object} data New data to load the table with
+   */
+  reloadTableWithData(data) {
+    this.prevTableData = [...data];
+    this.tableData = [...data];
 
-		this.setWidthByColumn(this.config.widthByColumn);
-		this.registerStickyColumnsLeft(this.config.stickColumnsLeft);
-		this.registerStickyColumnsRight(this.config.stickColumnsRight);
-		this.showTooltip();
-		$(`#${this.tableID}.moderno-table-wrapper`).scroll();
-	}
+    var colKeys = this.getHeaderColumnDataKeys();
+    var clipClass = this.config.singleLineRows ? "clip" : "no-clip";
 
-	/**
-	 * Create a HTML string for new row to be inserted 
-	 * @param {Object} row Object containing the information of row data
-	 * @returns {string} HTML string 
-	*/
-	getRowString(rowindex, colKeys, clipClass) {
-		var cellskeletions = {};
-		var conditions = {};
-		for (var  i = 0; i < colKeys.length; i++) {
-			var value = this.tableData[rowindex][colKeys[i]];	
-			var conditioncolor = '';
-			var condition = this.executeCondition(rowindex, colKeys[i]);
-			if (condition) {
-				var conditioncolor = `color: ${condition.highlightcolor};`;
-				conditions[condition.id] = condition.result;
-			}
+    var dataString = "";
+    for (var i = 0; i < data.length; i++) {
+      dataString += this.getRowString(i, colKeys, clipClass);
+    }
+    $(`#${this.tableID} .moderno-table-body`).html(dataString);
 
-			var skel = { classes: `moderno-table-item ${clipClass}`, ids: `moderno-table-${rowindex}-${i}`, styles: conditioncolor, rawvalue: value, cellgenerator: undefined};
-			cellskeletions[colKeys[i]] = skel;
-		}
+    this.setWidthByColumn(this.config.widthByColumn);
+    this.registerStickyColumnsLeft(this.config.stickColumnsLeft);
+    this.registerStickyColumnsRight(this.config.stickColumnsRight);
+    this.showTooltip();
+    $(`#${this.tableID}.moderno-table-wrapper`).scroll();
+  }
 
-		if (typeof(this.consequence) !== 'undefined') {
-			cellskeletions = this.consequence(rowindex, colKeys, conditions, cellskeletions);
-		}
+  /**
+   * Create a HTML string for new row to be inserted
+   * @param {Object} row Object containing the information of row data
+   * @returns {string} HTML string
+   */
+  getRowString(rowindex, colKeys, clipClass) {
+    var cellskeletions = {};
+    var conditions = {};
+    for (var i = 0; i < colKeys.length; i++) {
+      var value = this.tableData[rowindex][colKeys[i]];
+      var conditioncolor = "";
+      var condition = this.executeCondition(rowindex, colKeys[i]);
+      if (condition) {
+        var conditioncolor = `color: ${condition.highlightcolor};`;
+        conditions[condition.id] = condition.result;
+      }
 
-		var string = `<div class="moderno-table-row" id="moderno-table-row-${rowindex}">`;
-		for (var  i = 0; i < colKeys.length; i++) {
-			var cellcontent = '';
-			var value = cellskeletions[colKeys[i]]['rawvalue'];
+      var skel = {
+        classes: `moderno-table-item ${clipClass}`,
+        ids: `moderno-table-${rowindex}-${i}`,
+        styles: conditioncolor,
+        rawvalue: value,
+        cellgenerator: undefined
+      };
+      cellskeletions[colKeys[i]] = skel;
+    }
 
-			if (cellskeletions[colKeys[i]].cellgenerator !== undefined) {
-				cellcontent = cellskeletions[colKeys[i]].cellgenerator(value);
-			} else if (value == undefined) {
-				console.warn(`Error finding key '${colKeys[i]}' in data at row with index ${rowindex}`);
-				cellcontent = this.customCells[colKeys[i]] == undefined ? '-' : this.customCells[colKeys[i]].generate(value);
-			} else {
-				cellcontent = this.customCells[colKeys[i]] == undefined ? value : this.customCells[colKeys[i]].generate(value);
-			}
-			
-			string += `<div class='${cellskeletions[colKeys[i]].classes}' id='${cellskeletions[colKeys[i]].ids}' style='${cellskeletions[colKeys[i]].styles}'>${cellcontent}</div>`;
-		}
-		string += `</div>`;
-		return string;
-	}
+    if (typeof this.consequence !== "undefined") {
+      cellskeletions = this.consequence(
+        rowindex,
+        colKeys,
+        conditions,
+        cellskeletions
+      );
+    }
 
-	/**
-	 * Get the `data-key` attribute specified in header columns. This attribute holds the key name for the respective column in the JS Object of row data.
-	 * @returns {Array(string)} an array of keys for the respective columns will be returned in order from left to right
-	*/
-	getHeaderColumnDataKeys() {
-		var keys = [];
-		$(`#${this.tableID} .moderno-table-header .moderno-table-row:first-child .moderno-table-item`)
-			.each(function() {
-				var key = $(this).attr('data-key');
-				if (key == undefined) {
-					console.warn(`data-key attribute is not set in header item at position ${$(this).index()}`);
-					keys.push('');
-				} else {
-					keys.push(key);
-				}
-			}
-		);
-		return keys;
-	}
+    var string = `<div class="moderno-table-row" id="moderno-table-row-${rowindex}">`;
+    for (var i = 0; i < colKeys.length; i++) {
+      var cellcontent = "";
+      var value = cellskeletions[colKeys[i]]["rawvalue"];
 
-	setValueAtRowWithHeaderKey(value, row, headerkey) {
-		var keys = this.getHeaderColumnDataKeys();
-		for (var i = 0; i < keys.length; i++) {
-			if (headerkey == keys[i]) {
-				$(`#${this.tableID} #moderno-table-${row}-${i}`).html(value);
-			}
-		}
-	}
+      if (cellskeletions[colKeys[i]].cellgenerator !== undefined) {
+        cellcontent = cellskeletions[colKeys[i]].cellgenerator(value);
+      } else if (value == undefined) {
+        console.warn(
+          `Error finding key '${
+            colKeys[i]
+          }' in data at row with index ${rowindex}`
+        );
+        cellcontent =
+          this.customCells[colKeys[i]] == undefined
+            ? "-"
+            : this.customCells[colKeys[i]].generate(value);
+      } else {
+        cellcontent =
+          this.customCells[colKeys[i]] == undefined
+            ? value
+            : this.customCells[colKeys[i]].generate(value);
+      }
 
-	setTextColorAtRowWithHeaderKey(value, row, headerkey) {
-		this.setCssAtRowWithHeaderKey('color', value, row, headerkey);
-	}
+      string += `<div class='${cellskeletions[colKeys[i]].classes}' id='${
+        cellskeletions[colKeys[i]].ids
+      }' style='${cellskeletions[colKeys[i]].styles}'>${cellcontent}</div>`;
+    }
+    string += `</div>`;
+    return string;
+  }
 
-	setCssAtRowWithHeaderKey(type, value, row, headerkey) {
-		var keys = this.getHeaderColumnDataKeys();
-		for (var i = 0; i < keys.length; i++) {
-			if (headerkey == keys[i]) {
-				$(`#${this.tableID} #moderno-table-${row}-${i}`).attr('style', function(i,s) { return s + `${type}: ${value} !important;` });
-			}
-		}
-	}
+  /**
+   * Get the `data-key` attribute specified in header columns. This attribute holds the key name for the respective column in the JS Object of row data.
+   * @returns {Array(string)} an array of keys for the respective columns will be returned in order from left to right
+   */
+  getHeaderColumnDataKeys() {
+    var keys = [];
+    $(
+      `#${
+        this.tableID
+      } .moderno-table-header .moderno-table-row:first-child .moderno-table-item`
+    ).each(function() {
+      var key = $(this).attr("data-key");
+      if (key == undefined) {
+        console.warn(
+          `data-key attribute is not set in header item at position ${$(
+            this
+          ).index()}`
+        );
+        keys.push("");
+      } else {
+        keys.push(key);
+      }
+    });
+    return keys;
+  }
 
-	showLoadingIndicator() {
-		var width = $(`#${this.tableID} .moderno-table`).outerWidth();
-		var headerHeight = $(`#${this.tableID} .moderno-table-header`).outerHeight();
-		var height = $(`#${this.tableID}.moderno-table-wrapper`).outerHeight() - headerHeight;
+  setValueAtRowWithHeaderKey(value, row, headerkey) {
+    var keys = this.getHeaderColumnDataKeys();
+    for (var i = 0; i < keys.length; i++) {
+      if (headerkey == keys[i]) {
+        $(`#${this.tableID} #moderno-table-${row}-${i}`).html(value);
+      }
+    }
+  }
 
-		$(`#${this.tableID} .moderno-loading-indicator`).width(width).height(height).css('top', headerHeight);
-		$(`#${this.tableID}.moderno-table-wrapper`).css('overflow-y', 'hidden');
-		$(`#${this.tableID}.moderno-table-wrapper`).css('overflow-x', 'scroll');
-		$(`#${this.tableID} .moderno-loading-indicator`).css('opacity', 0).css('display', 'block');
-		$(`#${this.tableID} .moderno-loading-indicator`).animate({opacity: 1}, 200);
-	}
+  setTextColorAtRowWithHeaderKey(value, row, headerkey) {
+    this.setCssAtRowWithHeaderKey("color", value, row, headerkey);
+  }
 
-	hideLoadingIndicator() {
-		$(`#${this.tableID} .moderno-loading-indicator`).animate({opacity: 0}, 200, () => {
-			$(`#${this.tableID} .moderno-loading-indicator`).css('display', 'none');
-			$(`#${this.tableID}.moderno-table-wrapper`).css('overflow-y', 'scroll');
-		});
-	}
+  setCssAtRowWithHeaderKey(type, value, row, headerkey) {
+    var keys = this.getHeaderColumnDataKeys();
+    for (var i = 0; i < keys.length; i++) {
+      if (headerkey == keys[i]) {
+        $(`#${this.tableID} #moderno-table-${row}-${i}`).attr("style", function(
+          i,
+          s
+        ) {
+          return s + `${type}: ${value} !important;`;
+        });
+      }
+    }
+  }
 
-	initTooltip() {
-		$(`#${this.tableID} .moderno-table`).append(`<div class="moderno-tooltip"></div>`);
-	}
+  showLoadingIndicator() {
+    var width = $(`#${this.tableID} .moderno-table`).outerWidth();
+    var headerHeight = $(
+      `#${this.tableID} .moderno-table-header`
+    ).outerHeight();
+    var height =
+      $(`#${this.tableID}.moderno-table-wrapper`).outerHeight() - headerHeight;
 
-	showTooltip() {
-		$(`#${this.tableID} .moderno-table-body .moderno-table-item`).on({
-			mouseenter: (event) => {
-				var didOverflow = $(event.currentTarget)[0].scrollWidth > $(event.currentTarget).innerWidth();
-				if (didOverflow) {
-					var itemPos = $(event.currentTarget).position();
-					var headerHeight = $(`#${this.tableID} .moderno-table-header`).outerHeight();
-					itemPos.top += headerHeight;
-					var text = $(event.currentTarget).html();
-					$(`#${this.tableID} .moderno-tooltip`).html(text).css({top: itemPos.top, left: itemPos.left}).addClass('active');
-				}
-			},
-			mouseleave: (event) => {
-				$(`#${this.tableID} .moderno-tooltip`).removeClass('active');
-			}
-		});
-	}
+    $(`#${this.tableID} .moderno-loading-indicator`)
+      .width(width)
+      .height(height)
+      .css("top", headerHeight);
+    $(`#${this.tableID}.moderno-table-wrapper`).css("overflow-y", "hidden");
+    $(`#${this.tableID}.moderno-table-wrapper`).css("overflow-x", "scroll");
+    $(`#${this.tableID} .moderno-loading-indicator`)
+      .css("opacity", 0)
+      .css("display", "block");
+    $(`#${this.tableID} .moderno-loading-indicator`).animate(
+      { opacity: 1 },
+      200
+    );
+  }
 
-	registerConditionOnColumn(id, condition, highlightColor, headerKey, callback = () => {}) {
-		this.columnConditionalFormatting[headerKey] = {id: id, condition: condition, highlightColor: highlightColor, callback: callback}
-	}
+  hideLoadingIndicator() {
+    $(`#${this.tableID} .moderno-loading-indicator`).animate(
+      { opacity: 0 },
+      200,
+      () => {
+        $(`#${this.tableID} .moderno-loading-indicator`).css("display", "none");
+        $(`#${this.tableID}.moderno-table-wrapper`).css("overflow-y", "scroll");
+      }
+    );
+  }
 
-	executeCondition(rowindex, headerKey) {
-		if (this.columnConditionalFormatting[headerKey] === undefined) {
-			return null;
-		}
-		if (this.columnConditionalFormatting[headerKey].condition(this.tableData[rowindex])) {
-			this.columnConditionalFormatting[headerKey].callback(true, rowindex, headerKey);
-			return {id: this.columnConditionalFormatting[headerKey].id, result: true, highlightcolor: this.columnConditionalFormatting[headerKey]['highlightColor']};
-		} else {
-			this.columnConditionalFormatting[headerKey].callback(false, rowindex, headerKey);
-			return {id: this.columnConditionalFormatting[headerKey].id, result: false, highlightcolor: ''};;
-		}
-	}
+  initTooltip() {
+    $(`#${this.tableID} .moderno-table`).append(
+      `<div class="moderno-tooltip"></div>`
+    );
+  }
 
-	registerConsequence(callback = ()=>{}) {
-		this.consequence = callback;
-	}
+  showTooltip() {
+    $(`#${this.tableID} .moderno-table-body .moderno-table-item`).on({
+      mouseenter: event => {
+        var didOverflow =
+          $(event.currentTarget)[0].scrollWidth >
+          $(event.currentTarget).innerWidth();
+        if (didOverflow) {
+          var itemPos = $(event.currentTarget).position();
+          var headerHeight = $(
+            `#${this.tableID} .moderno-table-header`
+          ).outerHeight();
+          itemPos.top += headerHeight;
+          var text = $(event.currentTarget).html();
+          $(`#${this.tableID} .moderno-tooltip`)
+            .html(text)
+            .css({ top: itemPos.top, left: itemPos.left })
+            .addClass("active");
+        }
+      },
+      mouseleave: event => {
+        $(`#${this.tableID} .moderno-tooltip`).removeClass("active");
+      }
+    });
+  }
 
-	registerCustomCellGenerator(generatecell, headerkey) {
-		this.customCells[headerkey] = {'generate': generatecell};
-	}
+  registerConditionOnColumn(
+    id,
+    condition,
+    highlightColor,
+    headerKey,
+    callback = () => {}
+  ) {
+    this.columnConditionalFormatting[headerKey] = {
+      id: id,
+      condition: condition,
+      highlightColor: highlightColor,
+      callback: callback
+    };
+  }
+
+  executeCondition(rowindex, headerKey) {
+    if (this.columnConditionalFormatting[headerKey] === undefined) {
+      return null;
+    }
+    if (
+      this.columnConditionalFormatting[headerKey].condition(
+        this.tableData[rowindex]
+      )
+    ) {
+      this.columnConditionalFormatting[headerKey].callback(
+        true,
+        rowindex,
+        headerKey
+      );
+      return {
+        id: this.columnConditionalFormatting[headerKey].id,
+        result: true,
+        highlightcolor: this.columnConditionalFormatting[headerKey][
+          "highlightColor"
+        ]
+      };
+    } else {
+      this.columnConditionalFormatting[headerKey].callback(
+        false,
+        rowindex,
+        headerKey
+      );
+      return {
+        id: this.columnConditionalFormatting[headerKey].id,
+        result: false,
+        highlightcolor: ""
+      };
+    }
+  }
+
+  registerConsequence(callback = () => {}) {
+    this.consequence = callback;
+  }
+
+  registerCustomCellGenerator(generatecell, headerkey) {
+    this.customCells[headerkey] = { generate: generatecell };
+  }
 }
 
 /// Moderno Table's default configuration
 TableModerno.default_config = {
-	defaultWidth: 300,
-	widthByColumn: [],
-	scrollBarType: 'default',
-	stickHeader: true,
-	stickColumnsLeft: [1],
-	stickColumnsRight: [6],
-	singleLineRows: false
+  defaultWidth: 300,
+  widthByColumn: [],
+  scrollBarType: "default",
+  stickHeader: true,
+  stickColumnsLeft: [1],
+  stickColumnsRight: [6],
+  singleLineRows: false,
+  highlightHeaderColor: true,
+  highlightBodyColor: true,
+  tooltip: true
 };
