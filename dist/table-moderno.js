@@ -21,7 +21,6 @@ class TableModerno {
     this.setWidthByColumn(this.config.widthByColumn);
 
     this.initLoadingIndicator();
-    this.initTooltip();
     this.initSortingView();
     if (this.config.highlightHeaderColor == true) {
       this.initHeaderDefaultEventResponders();
@@ -36,6 +35,7 @@ class TableModerno {
     this.registerStickyColumnsLeft(this.config.stickColumnsLeft);
     this.registerStickyColumnsRight(this.config.stickColumnsRight);
     if (this.config.tooltip == true) {
+      this.initTooltip();
       this.showTooltip();
     }
   }
