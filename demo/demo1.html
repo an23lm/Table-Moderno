@@ -16,13 +16,26 @@
   		integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
   		crossorigin="anonymous"></script>
 	<script type="text/javascript" src="../dist/table-moderno.js"></script>
+	<style>
+		.cusid {
+			height: 15px;
+			width: 15px;
+		}
+		.cusid.hide {
+			display: none;
+		}
+		.cusid.show {
+			display: inline;
+		}
+	</style>
 </head>
 <body>
+	<button onclick="openSort();">Open Sort</button>
 	<div class="moderno-table-wrapper" id="table1">
 		<div class="moderno-table">
 			<div class="moderno-table-header">
 				<div class="moderno-table-row">
-					<div class="moderno-table-item" data-key="id">ID</div>
+					<div class="moderno-table-item" data-key="id"><span style="font-size: 0.6em; font-weight: 800">DR</span>Company ID</div>
 					<div class="moderno-table-item" data-key="name">Name</div>
 					<div class="moderno-table-item" data-key="mail">Email</div>
 					<div class="moderno-table-item" data-key="ph">Phone</div>
@@ -31,131 +44,60 @@
 				</div>
 			</div>
 			<div class="moderno-table-body">
-				<div class="moderno-table-row">
-					<div class="moderno-table-item">1</div>
-					<div class="moderno-table-item">Patrick</div>
-					<div class="moderno-table-item">thisispatrick@krustykrab.com</div>
-					<div class="moderno-table-item">+1800-krusty-krab</div>
-					<div class="moderno-table-item">Uh, that's the name of the restaurant</div>
-					<div class="moderno-table-item">Sleeping</div>
-				</div>
-				<div class="moderno-table-row">
-					<div class="moderno-table-item">1</div>
-					<div class="moderno-table-item">Patrick</div>
-					<div class="moderno-table-item">thisispatrick@krustykrab.com</div>
-					<div class="moderno-table-item">+1800-krusty-krab</div>
-					<div class="moderno-table-item">Uh, that's the name of the restaurant</div>
-					<div class="moderno-table-item">Sleeping</div>
-				</div>
-				<div class="moderno-table-row">
-					<div class="moderno-table-item">1</div>
-					<div class="moderno-table-item">Patrick</div>
-					<div class="moderno-table-item">thisispatrick@krustykrab.com</div>
-					<div class="moderno-table-item">+1800-krusty-krab</div>
-					<div class="moderno-table-item">Uh, that's the name of the restaurant</div>
-					<div class="moderno-table-item">Sleeping</div>
-				</div>
-				<div class="moderno-table-row">
-					<div class="moderno-table-item">1</div>
-					<div class="moderno-table-item">Patrick</div>
-					<div class="moderno-table-item">thisispatrick@krustykrab.com</div>
-					<div class="moderno-table-item">+1800-krusty-krab</div>
-					<div class="moderno-table-item">Uh, that's the name of the restaurant</div>
-					<div class="moderno-table-item">Sleeping</div>
-				</div>
-				<div class="moderno-table-row">
-					<div class="moderno-table-item">1</div>
-					<div class="moderno-table-item">Patrick</div>
-					<div class="moderno-table-item">thisispatrick@krustykrab.com</div>
-					<div class="moderno-table-item">+1800-krusty-krab</div>
-					<div class="moderno-table-item">Uh, that's the name of the restaurant</div>
-					<div class="moderno-table-item">Sleeping</div>
-				</div>
-				<div class="moderno-table-row">
-					<div class="moderno-table-item">1</div>
-					<div class="moderno-table-item">Patrick</div>
-					<div class="moderno-table-item">thisispatrick@krustykrab.com</div>
-					<div class="moderno-table-item">+1800-krusty-krab</div>
-					<div class="moderno-table-item">Uh, that's the name of the restaurant</div>
-					<div class="moderno-table-item">Sleeping</div>
-				</div>
-				<div class="moderno-table-row">
-					<div class="moderno-table-item">1</div>
-					<div class="moderno-table-item">Patrick</div>
-					<div class="moderno-table-item">thisispatrick@krustykrab.com</div>
-					<div class="moderno-table-item">+1800-krusty-krab</div>
-					<div class="moderno-table-item">Uh, that's the name of the restaurant</div>
-					<div class="moderno-table-item">Sleeping</div>
-				</div>
-				<div class="moderno-table-row">
-					<div class="moderno-table-item">1</div>
-					<div class="moderno-table-item">Patrick</div>
-					<div class="moderno-table-item">thisispatrick@krustykrab.com</div>
-					<div class="moderno-table-item">+1800-krusty-krab</div>
-					<div class="moderno-table-item">Uh, that's the name of the restaurant</div>
-					<div class="moderno-table-item">Sleeping</div>
-				</div>
-				<div class="moderno-table-row">
-					<div class="moderno-table-item">1</div>
-					<div class="moderno-table-item">Patrick</div>
-					<div class="moderno-table-item">thisispatrick@krustykrab.com</div>
-					<div class="moderno-table-item">+1800-krusty-krab</div>
-					<div class="moderno-table-item">Uh, that's the name of the restaurant</div>
-					<div class="moderno-table-item">Sleeping</div>
-				</div>
-				<div class="moderno-table-row">
-					<div class="moderno-table-item">1</div>
-					<div class="moderno-table-item">Patrick</div>
-					<div class="moderno-table-item">thisispatrick@krustykrab.com</div>
-					<div class="moderno-table-item">+1800-krusty-krab</div>
-					<div class="moderno-table-item">Uh, that's the name of the restaurant</div>
-					<div class="moderno-table-item">Sleeping</div>
-				</div>
-				<div class="moderno-table-row">
-					<div class="moderno-table-item">1</div>
-					<div class="moderno-table-item">Patrick</div>
-					<div class="moderno-table-item">thisispatrick@krustykrab.com</div>
-					<div class="moderno-table-item">+1800-krusty-krab</div>
-					<div class="moderno-table-item">Uh, that's the name of the restaurant</div>
-					<div class="moderno-table-item">Sleeping</div>
-				</div>
-				<div class="moderno-table-row">
-					<div class="moderno-table-item">1</div>
-					<div class="moderno-table-item">Patrick</div>
-					<div class="moderno-table-item">thisispatrick@krustykrab.com</div>
-					<div class="moderno-table-item">+1800-krusty-krab</div>
-					<div class="moderno-table-item">Uh, that's the name of the restaurant</div>
-					<div class="moderno-table-item">Sleeping</div>
-				</div>
-				<div class="moderno-table-row">
-					<div class="moderno-table-item">1</div>
-					<div class="moderno-table-item">Patrick</div>
-					<div class="moderno-table-item">thisispatrick@krustykrab.com</div>
-					<div class="moderno-table-item">+1800-krusty-krab</div>
-					<div class="moderno-table-item">Uh, that's the name of the restaurant</div>
-					<div class="moderno-table-item">Sleeping</div>
-				</div>
+
 			</div>
 		</div>
 	</div>
 	<script type="text/javascript">
 		const config = {
 			scrollBarType: 'always',
-			widthByColumn: [100, 400, 500, 100, 100, 100],
-			stickColumnsLeft: [1, 2],
-			stickColumnsRight: [4]
+			widthByColumn: [100, 100, 100, 100, 100, 100],
+			stickColumnsLeft: [1],
+			stickColumnsRight: [4],
+			stickHeader: true,
+			singleLineRows: true
 		};
 		var moderno = new TableModerno("table1", config);
 		
 		var newData = [];
 		const obj = {id: 1, name: 'SquarePants', mail: 'squrepants@subway.com', ph: '+1800-doh', prof: 'pineapple', hobbs: 'ff?'};
+		newData.push({id: 1, name: 'SquarePants', mail: 'squrepants@subway.com', ph: '+1800-doh', hobbs: 'ff?'})
+		newData.push({id: 1, name: 'SquarePants', mail: 'squrepants@subway.com', ph: '+1800-doh', prof: 'pine', hobbs: 'ff?'})
 		for (var i = 0; i < 40; i++) {
 			newData.push(obj);
 		}
+
+		moderno.registerConditionOnColumn('cond1', function(row) {
+			return row.prof != undefined && row.prof.length > 5 ? true : false;
+		}, 'red!important', 'prof');
+	
+		moderno.registerCustomCellGenerator(function(value) {
+			if (value == undefined) {
+				value = '-';
+			}
+			return `<img class='cusid hide' src='../dist/static/sort.svg'/>${value}`;
+		}, 'id')
+
+		moderno.registerConsequence((rowindex, colKeys, conditions, cellskeletions) => {
+			if (conditions.cond1) {
+				cellskeletions.id.cellgenerator = (value) => { return `<img class='cusid show' src='../dist/static/sort.svg'/>${value}`; }
+			}
+			return cellskeletions;
+		})
+
+		moderno.showLoadingIndicator();
 		moderno.reloadTableWithData(newData);
-		moderno.setValueAtRowWithHeaderKey(20, 0, 'id');
-		moderno.setTextColorAtRowWithHeaderKey("red", 0, "id");
-		moderno.setCssAtRowWithHeaderKey("background","Black", 0 , "id");
+		// moderno.setValueAtRowWithHeaderKey(20, 4, 'id');
+		// moderno.setTextColorAtRowWithHeaderKey("red", 0, "id");
+		// moderno.setCssAtRowWithHeaderKey("background", "Black", 0 , "id");
+
+		setTimeout(() => {
+			moderno.hideLoadingIndicator();
+		}, 500);
+
+		function openSort() {
+			moderno.openSortView();
+		}
 	</script>
 </body>
 </html>
