@@ -644,7 +644,7 @@ class TableModerno {
       }
 
       if (this.config.convertToLocaleString) {
-        value = !isNaN(value) ? (+value).toLocaleString(this.config.locale) : value;
+        value = !isNaN(value) ? (+value).toLocaleString(this.config.locale, {maximumFractionDigits: this.config.maximumFractionDigits}) : value;
       }
 
       var skel = {
@@ -863,4 +863,5 @@ TableModerno.default_config = {
   tooltip: true,
   convertToLocaleString: false,
   locale: 'en-US',
+  maximumFractionDigits: 2,
 };
