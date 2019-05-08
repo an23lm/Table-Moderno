@@ -461,7 +461,7 @@ class TableModerno {
     }
 
     Promise.all(sortPromises).then(() => {
-      this.reloadTableWithData(this.tableData);
+      this.reloadTableWithData(this.tableData, true);
       this.hideLoadingIndicator();
     });
   }
@@ -602,11 +602,13 @@ class TableModerno {
    * Reload table with new data and re-set widths for new items
    * @param {Object} data New data to load the table with
    */
-  reloadTableWithData(data) {
+  reloadTableWithData(data, keepSort = false) {
     this.prevTableData = [...data];
     this.tableData = [...data];
     
-    this.resetSortList();
+    if (!keepSort) {
+      this.resetSortList();
+    }
 
     var colKeys = this.getHeaderColumnDataKeys();
     var clipClass = this.config.singleLineRows ? "clip" : "no-clip";
@@ -641,6 +643,10 @@ class TableModerno {
         conditions[condition.id] = condition.result;
       }
 
+      if (this.config.convertToLocaleString) {
+        value = !isNaN(value) ? (+value).toLocaleString(this.config.locale) : value;
+      }
+
       var skel = {
         classes: `moderno-table-item ${clipClass}`,
         ids: `moderno-table-${rowindex}-${i}`,
@@ -652,12 +658,7 @@ class TableModerno {
     }
 
     if (typeof this.consequence !== "undefined") {
-      cellskeletions = this.consequence(
-        rowindex,
-        colKeys,
-        conditions,
-        cellskeletions
-      );
+      cellskeletions = this.consequence(rowindex, colKeys, conditions, cellskeletions);
     }
 
     var string = `<div class="moderno-table-row" id="moderno-table-row-${rowindex}">`;
@@ -673,15 +674,9 @@ class TableModerno {
             colKeys[i]
           }' in data at row with index ${rowindex}`
         );
-        cellcontent =
-          this.customCells[colKeys[i]] == undefined
-            ? "-"
-            : this.customCells[colKeys[i]].generate(value);
+        cellcontent = this.customCells[colKeys[i]] == undefined ? "-" : this.customCells[colKeys[i]].generate(value);
       } else {
-        cellcontent =
-          this.customCells[colKeys[i]] == undefined
-            ? value
-            : this.customCells[colKeys[i]].generate(value);
+        cellcontent = this.customCells[colKeys[i]] == undefined ? value : this.customCells[colKeys[i]].generate(value);
       }
 
       string += `<div class='${cellskeletions[colKeys[i]].classes}' id='${
@@ -699,17 +694,11 @@ class TableModerno {
   getHeaderColumnDataKeys() {
     var keys = [];
     $(
-      `#${
-        this.tableID
-      } .moderno-table-header .moderno-table-row:first-child .moderno-table-item`
+      `#${this.tableID} .moderno-table-header .moderno-table-row:first-child .moderno-table-item`
     ).each(function() {
       var key = $(this).attr("data-key");
       if (key == undefined) {
-        console.warn(
-          `data-key attribute is not set in header item at position ${$(
-            this
-          ).index()}`
-        );
+        console.warn(`data-key attribute is not set in header item at position ${$(this).index()}`);
         keys.push("");
       } else {
         keys.push(key);
@@ -735,10 +724,7 @@ class TableModerno {
     var keys = this.getHeaderColumnDataKeys();
     for (var i = 0; i < keys.length; i++) {
       if (headerkey == keys[i]) {
-        $(`#${this.tableID} #moderno-table-${row}-${i}`).attr("style", function(
-          i,
-          s
-        ) {
+        $(`#${this.tableID} #moderno-table-${row}-${i}`).attr("style", function(i,s) {
           return s + `${type}: ${value} !important;`;
         });
       }
@@ -810,13 +796,7 @@ class TableModerno {
     });
   }
 
-  registerConditionOnColumn(
-    id,
-    condition,
-    highlightColor,
-    headerKey,
-    callback = () => {}
-  ) {
+  registerConditionOnColumn(id, condition, highlightColor, headerKey, callback = () => {}) {
     this.columnConditionalFormatting[headerKey] = {
       id: id,
       condition: condition,
@@ -880,5 +860,7 @@ TableModerno.default_config = {
   singleLineRows: false,
   highlightHeaderColor: true,
   highlightBodyColor: true,
-  tooltip: true
+  tooltip: true,
+  convertToLocaleString: false,
+  locale: 'en-US',
 };

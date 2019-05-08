@@ -59,14 +59,16 @@
 			singleLineRows: true,
 			highlightBodyColor : false,
 			highlightHeaderColor: false,
-			tooltip : false
+			tooltip : false,
+			convertToLocaleString: true,
+  			locale: 'en-IN',
 		};
 		var moderno = new TableModerno("table1", config);
-		
+		var ph = 12345
 		var newData = [];
-		const obj = {id: 1, name: 'SquarePants', mail: 'squrepants@subway.com', ph: '+1800-doh', prof: 'pineapple', hobbs: 'ff?'};
-		newData.push({id: 1, name: 'SquarePants', mail: 'squrepants@subway.com', ph: '+1800-doh', hobbs: 'ff?'})
-		newData.push({id: 1, name: 'SquarePants', mail: 'squrepants@subway.com', ph: '+1800-doh', prof: 'pine', hobbs: 'ff?'})
+		const obj = {id: 1, name: 'SquarePants', mail: 'squrepants@subway.com', ph: ph, prof: 'pineapple', hobbs: 'ff?'};
+		newData.push({id: 1, name: 'SquarePants', mail: 'squrepants@subway.com', ph: ++ph, hobbs: 'ff?'})
+		newData.push({id: 1, name: 'SquarePants', mail: 'squrepants@subway.com', ph: ++ph, prof: 'pine', hobbs: 'ff?'})
 		for (var i = 0; i < 40; i++) {
 			newData.push(obj);
 		}
