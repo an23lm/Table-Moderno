@@ -297,6 +297,13 @@ class TableModerno {
     $(`#${this.tableID}.moderno-table-wrapper`).scroll();
   }
 
+  resetSortList() {
+    this.prevSortHeaderList = [];
+    this.prevSortHeaderDirection = {};
+    this.sortHeaderList = [];
+    this.sortHeaderDirection = {};
+  }
+
   /**
    * Open sorting view
    */
@@ -598,6 +605,8 @@ class TableModerno {
   reloadTableWithData(data) {
     this.prevTableData = [...data];
     this.tableData = [...data];
+    
+    this.resetSortList();
 
     var colKeys = this.getHeaderColumnDataKeys();
     var clipClass = this.config.singleLineRows ? "clip" : "no-clip";

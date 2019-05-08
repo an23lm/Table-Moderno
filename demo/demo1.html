@@ -31,6 +31,7 @@
 </head>
 <body>
 	<button onclick="openSort();">Open Sort</button>
+	<button onclick="reloadTable();">Reload Table</button>
 	<div class="moderno-table-wrapper" id="table1">
 		<div class="moderno-table">
 			<div class="moderno-table-header">
@@ -100,6 +101,10 @@
 
 		function openSort() {
 			moderno.openSortView();
+		}
+
+		function reloadTable() {
+			moderno.reloadTableWithData(newData);
 		}
 	</script>
 </body>
