@@ -41,6 +41,10 @@ class TableModerno {
       this.initTooltip();
       this.showTooltip();
     }
+
+    if (this.config.lazyLoad) {
+      this.registerLazyLoad();
+    }
   }
 
   /**
@@ -705,6 +709,41 @@ class TableModerno {
   registerCustomCellGenerator(generatecell, headerkey) {
     this.customCells[headerkey] = { generate: generatecell };
   }
+
+  scrollWaitForLoad() {
+    this.isScrollLoading = true;
+  }
+
+  scrollDoneLoad() {
+    this.isScrollLoading = false;
+  }
+
+  registerLazyLoad() {
+    let prevScrollPos = -100;
+    let elementSelector = `#${this.tableID}.moderno-table-wrapper`;
+    this.scrollDoneLoad();
+    this.lazyLoadCallback = () => {};
+
+    $(elementSelector).on('scroll', () => {
+        let scrollPos = $(elementSelector)[0].scrollTop;
+        if (prevScrollPos > scrollPos) return;
+        prevScrollPos = scrollPos;
+
+        let height = $(elementSelector)[0].scrollHeight,
+            clipHeight = $(elementSelector).height(),
+            perc = (height - clipHeight) * (this.config.lazyLoadTrigger / 100);
+
+        if (scrollPos >= perc || height <= clipHeight) {
+            if (this.isScrollLoading) return;
+            this.scrollWaitForLoad();
+            this.lazyLoadCallback(this.scrollDoneLoad.bind(this));
+        }
+    });
+  }
+
+  registerLazyLoadTriggerCallback(callback) {
+    this.lazyLoadCallback = callback;
+  }
 }
 
 /// Moderno Table's default configuration
@@ -722,4 +761,6 @@ TableModerno.default_config = {
   convertToLocaleString: false,
   locale: 'en-US',
   maximumFractionDigits: 2,
+  lazyLoad: false,
+  lazyLoadTrigger: 75,
 };
