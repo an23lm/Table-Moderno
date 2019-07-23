@@ -52,10 +52,19 @@ Clone the repository and open *demo1.html* in the *demo* folder with your favour
 {
     defaultWidth: 300,
     widthByColumn: [],
-    scrollBarType: 'default',
+    scrollBarType: "default",
     stickHeader: true,
     stickColumnsLeft: [1],
-    stickColumnsRight: [6]
+    stickColumnsRight: [6],
+    singleLineRows: false,
+    highlightHeaderColor: true,
+    highlightBodyColor: true,
+    tooltip: true,
+    convertToLocaleString: false,
+    locale: 'en-US',
+    maximumFractionDigits: 2,
+    lazyLoad: false,
+    lazyLoadTrigger: 75,
 };
 ```
 * `defaultWidth`: All columns are set to default width unless overridden by `widthByRow`
@@ -66,6 +75,15 @@ Clone the repository and open *demo1.html* in the *demo* folder with your favour
 * `stickHeader`: Makes the header sticky (header freeze)
 * `stickColumnsLeft`: Specify array of column numbers that need to stick to the left side of the table (column freeze)
 * `stickColumnsRight`: Specify array of column numbers that need to stick to the right side of the table (column freeze)
+* `singleLineRows`: Any data overflowing to a new line will be hidden.
+* `highlightHeaderColor`: Enable hover and select for header cells
+* `highlightBodyColor`: Enable hover and select for body cells.
+* `tooltop`: Works along with `singleLineRows`. If any overflowing data is clipped, then a tooltip is appear over hover.
+* `convertToLocaleString`: Display numbers with commas and decimal point placed according to your region. Eg: currency.
+* `locale`: Your locale setting
+* `maximumFractionDigits`: Number of digits visible after the decimal point.
+* `lazyLoad`: Enable or disable lazy loading.
+* `lazyLoadTrigger`: Percentage at which the callback is triggered to insert new data.
 
 Default values will be assumed for unspecified keys.
 
@@ -219,6 +237,14 @@ The following CSS variables can be set to make your table fit your theme.
     --moderno-header-text-color: black;
 }
 ```
+
+## Lazy Loading
+##### The new big feature in v1.5.0 is *drum roll please* **lazy loading**!
+* Two new `config` keys added -
+    * lazyLoad (Boolean)  *default: false* - Enable or disable lazy loading.
+    * lazyLoadTrigger (Number) *default: 75*- The percentage at which the callback is triggered to add new data.
+* `registerLazyLoadTriggerCallback(callback)` *callback: function* - The callback function is invoked when the `lazyLoadTrigger` threshold is reached. The callback function is invoked with one parameter - `callback(this.scrollDoneLoad.bind(this))`, which is also a callback. This parameter function should be invoked when the new data is done loading and is inserted into the table. Optionally, `scrollDoneLoad` can be directly called on the table object. 
+* `scrollDoneLoad` - Function is used to indicate that a new set of data from a lazy load is inserted. It is crucial to call this function after lazy loading is done for the operation of lazy load trigger callback.
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
