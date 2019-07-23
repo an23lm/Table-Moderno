@@ -63,6 +63,7 @@
 			convertToLocaleString: true,
 			locale: 'en-IN',
 			maximumFractionDigits: 2,
+			lazyLoad: true
 		};
 		var moderno = new TableModerno("table1", config);
 		var ph = 12345
@@ -73,6 +74,13 @@
 		for (var i = 0; i < 40; i++) {
 			newData.push(obj);
 		}
+
+		moderno.registerLazyLoadTriggerCallback((completion) => {
+			alert("callback");
+			setTimeout(() => {
+				completion();
+			}, 1000)
+		})
 
 		moderno.registerConditionOnColumn('cond1', function(row) {
 			return row.prof != undefined && row.prof.length > 5 ? true : false;
@@ -100,7 +108,7 @@
 
 		setTimeout(() => {
 			moderno.hideLoadingIndicator();
-			moderno.setWidthByColumn(['10pt'])
+			// moderno.setWidthByColumn([10])
 		}, 500);
 
 		function openSort() {
