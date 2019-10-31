@@ -27,6 +27,9 @@
 		.cusid.show {
 			display: inline;
 		}
+		#table1 {
+			width: 100%;
+		}
 	</style>
 </head>
 <body>
@@ -36,12 +39,12 @@
 		<div class="moderno-table">
 			<div class="moderno-table-header">
 				<div class="moderno-table-row">
-					<div class="moderno-table-item" data-key="id"><span style="font-size: 0.6em; font-weight: 800">DR</span>Company ID</div>
-					<div class="moderno-table-item" data-key="name">Name</div>
-					<div class="moderno-table-item" data-key="mail">Email</div>
-					<div class="moderno-table-item" data-key="ph">Phone</div>
-					<div class="moderno-table-item" data-key="prof">Profession</div>
-					<div class="moderno-table-item" data-key="hobbs">Hobbies</div>
+					<div class="moderno-table-item" data-key="id" moderno-column=0><span style="font-size: 0.6em; font-weight: 800">DR</span>Company ID</div>
+					<div class="moderno-table-item" data-key="name" moderno-column=1>Name</div>
+					<div class="moderno-table-item" data-key="mail" moderno-column=2>Email</div>
+					<div class="moderno-table-item" data-key="ph" moderno-column=3>Phone</div>
+					<div class="moderno-table-item" data-key="prof" moderno-column=4>Profession</div>
+					<div class="moderno-table-item" data-key="hobbs" moderno-column=5>Hobbies</div>
 				</div>
 			</div>
 			<div class="moderno-table-body">
@@ -52,31 +55,32 @@
 	<script type="text/javascript">
 		const config = {
 			scrollBarType: 'always',
-			widthByColumn: [100, 100, 100, 100, 100, 100],
+			widthByColumn: ['16%', '16%', '16%', '16%', '16%', '16%'],
 			stickColumnsLeft: [1],
 			stickColumnsRight: [4],
 			stickHeader: true,
 			singleLineRows: true,
 			highlightBodyColor : false,
 			highlightHeaderColor: false,
-			tooltip : false,
+			tooltip : true,
 			convertToLocaleString: true,
 			locale: 'en-IN',
 			maximumFractionDigits: 2,
-			lazyLoad: true
+			lazyLoad: true,
+			columnFit: 'fixed'
 		};
 		var moderno = new TableModerno("table1", config);
 		var ph = 12345
 		var newData = [];
-		const obj = {id: 1, name: 'SquarePants', mail: 'squrepants@subway.com', ph: ph, prof: 'pineapple', hobbs: 'ff?'};
-		newData.push({id: 1, name: 'SquarePants', mail: 'squrepants@subway.com', ph: ++ph, hobbs: 'ff?'})
-		newData.push({id: 1, name: 'SquarePants', mail: 'squrepants@subway.com', ph: ++ph, prof: 'pine', hobbs: 'ff?'})
-		for (var i = 0; i < 40; i++) {
+		const obj = {id: 1, name: 'SquarePants', mail: 'squrepants@subway.com', ph: ph, prof: 'pineapple pineapple', hobbs: 'ff?'};
+		newData.push({id: 1, name: 'SquarePants', mail: 'squrepants@subway.com squrepants@subway.com squrepants@subway.com squrepants@subway.com squrepants@subway.com squrepants@subway.com', ph: ++ph, hobbs: 'ff?'})
+		newData.push({id: 1, name: 'SquarePants', mail: 'squrepants@subway.com squrepants@subway.com', ph: ++ph, prof: 'pine', hobbs: 'ff?'})
+		for (var i = 0; i < 400; i++) {
 			newData.push(obj);
 		}
 
 		moderno.registerLazyLoadTriggerCallback((completion) => {
-			alert("callback");
+			// alert("callback");
 			setTimeout(() => {
 				completion();
 			}, 1000)
