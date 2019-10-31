@@ -573,6 +573,36 @@ class TableModerno {
   }
 
   /**
+   * Load more data into table and re-set widths for new items
+   * @param {Object} data New data to load the table with
+   */
+  appendData(data, keepSort = false) {
+    this.prevTableData = [...this.prevTableData, ...data];
+    this.tableData = [...this.tableData, ...data];
+
+    if (!keepSort) {
+      this.resetSortList();
+    }
+
+    var colKeys = this.getHeaderColumnDataKeys();
+    var clipClass = this.config.singleLineRows ? "clip" : "no-clip";
+
+    var dataString = "";
+    for (var i = 0; i < data.length; i++) {
+      dataString += this.getRowString(i, colKeys, clipClass);
+    }
+    let oldHtml =  $(`#${this.tableID} .moderno-table-body`).html()
+    $(`#${this.tableID} .moderno-table-body`).html(oldHtml + dataString);
+
+    this.setWidthByColumn(this.config.widthByColumn);
+    this.registerStickyColumnsLeft(this.config.stickColumnsLeft);
+    this.registerStickyColumnsRight(this.config.stickColumnsRight);
+    this.showTooltip();
+    $(`#${this.tableID}.moderno-table-wrapper`).scroll();
+  }
+
+
+  /**
    * Create a HTML string for new row to be inserted
    * @param {Object} row Object containing the information of row data
    * @returns {string} HTML string
