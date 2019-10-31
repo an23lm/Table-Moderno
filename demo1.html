@@ -80,7 +80,7 @@
 		}
 
 		moderno.registerLazyLoadTriggerCallback((completion) => {
-			// alert("callback");
+			moderno.appendData(newData)
 			setTimeout(() => {
 				completion();
 			}, 1000)
