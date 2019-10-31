@@ -484,7 +484,7 @@ class TableModerno {
       let colKeysLen = this.getHeaderColumnDataKeys().length;
       let headerLengths = []
       this.getHeaderColumnDataKeys().forEach(headerItem => {
-        headerLengths.push($(`[data-key=${headerItem}`).width())
+        headerLengths.push($(`[data-key=${headerItem}]`).width())
       });
       let colWidths = new Array(colKeysLen).fill(0);
       let colMaxWidth = new Array(colKeysLen).fill(0);
