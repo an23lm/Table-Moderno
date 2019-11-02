@@ -102,9 +102,11 @@ class TableModerno {
 							  <div class="moderno-sorting-order-number"></div>
 							  <label class="pure-material-checkbox moderno-sorting-item-checkbox">
 								  <input type="checkbox" data-key="${$(items[i]).attr("data-key")}">
-								  <span>${$(items[i])
-                    .html()
-                    .replace(/<(?:.|\n)*?>/gm, "")}</span>
+                  <span>
+                    ${$(items[i])
+                      .html()
+                      .replace(/<(?:.|\n)*?>/gm, "")}
+                  </span>
 							  </label>
 							  <button class="sort-button-wrapper sort-up" data-direction="up" onclick="event.stopPropagation();"><img class="ass-img"/></button>
 							  <button class="sort-button-wrapper sort-down" data-direction="down" onclick="event.stopPropagation();"><img class="dec-img"/></button>
@@ -591,8 +593,7 @@ class TableModerno {
     for (var i = 0; i < data.length; i++) {
       dataString += this.getRowString(i, colKeys, clipClass);
     }
-    let oldHtml =  $(`#${this.tableID} .moderno-table-body`).html()
-    $(`#${this.tableID} .moderno-table-body`).html(oldHtml + dataString);
+    $(`#${this.tableID} .moderno-table-body`).append(dataString);
 
     this.setWidthByColumn(this.config.widthByColumn);
     this.registerStickyColumnsLeft(this.config.stickColumnsLeft);
