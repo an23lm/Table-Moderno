@@ -75,7 +75,7 @@
 		const obj = {id: 1, name: 'SquarePants', mail: 'squrepants@subway.com', ph: ph, prof: 'pineapple pineapple', hobbs: 'ff?'};
 		newData.push({id: 1, name: 'SquarePants', mail: 'squrepants@subway.com squrepants@subway.com squrepants@subway.com squrepants@subway.com squrepants@subway.com squrepants@subway.com', ph: ++ph, hobbs: 'ff?'})
 		newData.push({id: 1, name: 'SquarePants', mail: 'squrepants@subway.com squrepants@subway.com', ph: ++ph, prof: 'pine', hobbs: 'ff?'})
-		for (var i = 0; i < 400; i++) {
+		for (var i = 0; i < 100; i++) {
 			newData.push(obj);
 		}
 
@@ -83,7 +83,7 @@
 			moderno.appendData(newData)
 			setTimeout(() => {
 				completion();
-			}, 1000)
+			}, 5000)
 		})
 
 		moderno.registerConditionOnColumn('cond1', function(row) {
