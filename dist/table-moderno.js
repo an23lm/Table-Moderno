@@ -761,7 +761,9 @@ class TableModerno {
             .css({
               top: itemPos.top,
               left: itemPos.left,
-              width: itemWidth > $(`#${this.tableID}`).width() - 20 ? $(`#${this.tableID}`).width() - 20 : itemWidth
+              'min-width': itemWidth > $(`#${this.tableID}`).width() - 20 ? $(`#${this.tableID}`).width() - 20 : itemWidth
+            })
+            .addClass("active");
             })
             .addClass("active");
         }
