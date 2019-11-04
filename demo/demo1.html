@@ -105,12 +105,12 @@
 		})
 
 		moderno.showLoadingIndicator();
-		moderno.reloadTableWithData(newData);
 		// moderno.setValueAtRowWithHeaderKey(20, 4, 'id');
 		// moderno.setTextColorAtRowWithHeaderKey("red", 0, "id");
 		// moderno.setCssAtRowWithHeaderKey("background", "Black", 0 , "id");
 
 		setTimeout(() => {
+			moderno.reloadTableWithData(newData);
 			moderno.hideLoadingIndicator();
 			// moderno.setWidthByColumn([10])
 		}, 500);

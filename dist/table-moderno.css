@@ -3,7 +3,7 @@
 	GitHub: github.com/an23lm
 	Email: anselmjosephs@gmail.com
 	License: GNU GPLv3
-	Version: v1.2.1
+	Version: v1.6.4
 */
 
 :root {
@@ -658,4 +658,21 @@ button:focus {outline:0;}
 .moderno-table-wrapper .pure-material-checkbox > input:indeterminate:disabled + span::before {
     border-color: transparent;
     background-color: currentColor;
+}
+
+.moderno-table-no-data {
+	display: flex;
+	height: 100pt;
+	flex: 1;
+	flex-flow: column nowrap;
+	justify-content: center;
+	align-items: center;
+}
+
+.moderno-table-no-data .moderno-table-no-data-item {
+	position: fixed;
+	padding: 20pt;
+	text-transform: uppercase;
+	border-radius: 5pt;
+	box-shadow: 0px 0px 10px #00000030;
 }

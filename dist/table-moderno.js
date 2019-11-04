@@ -3,7 +3,7 @@
  * GitHub: github.com/an23lm
  * Email: anselmjosephs@gmail.com
  * License: GNU GPLv3
- * Version: v1.2.1
+ * Version: v1.6.4
  */
 /// Table Moderno Class
 class TableModerno {
@@ -22,7 +22,7 @@ class TableModerno {
     this.customCells = {};
 
     //TODO: Inital header width
-    // this.setWidthByColumn(this.config.widthByColumn);
+    this.setWidthByColumn(this.config.widthByColumn);
 
     this.initLoadingIndicator();
     this.initSortingView();
@@ -554,9 +554,9 @@ class TableModerno {
     this.prevTableData = [...data];
     this.tableData = [...data];
 
-    if (!keepSort) {
-      this.resetSortList();
-    }
+    if (this.showNoDataAvailable()) return;
+    this.hideNoDataAvailable();
+    if (!keepSort) this.resetSortList();
 
     var colKeys = this.getHeaderColumnDataKeys();
     var clipClass = this.config.singleLineRows ? "clip" : "no-clip";
@@ -761,10 +761,9 @@ class TableModerno {
             .css({
               top: itemPos.top,
               left: itemPos.left,
-              'min-width': itemWidth > $(`#${this.tableID}`).width() - 20 ? $(`#${this.tableID}`).width() - 20 : itemWidth
+              width: itemWidth > $(`#${this.tableID}`).width() - 20 ? $(`#${this.tableID}`).width() - 20 : itemWidth
             })
             .addClass("active");
-
         }
       },
       mouseleave: event => {
@@ -847,7 +846,20 @@ class TableModerno {
   registerLazyLoadTriggerCallback(callback) {
     this.lazyLoadCallback = callback;
   }
+
+  showNoDataAvailable() {
+    if (this.tableData.length > 0) return false;
+    $(`#${this.tableID}`).append(this.config.noDataTemplate);
+    $(`#${this.tableID} .moderno-table-no-data`).css({ 'width':  $(`#${this.tableID}`).width() - 10 })
+    return true;
+  }
+
+  hideNoDataAvailable() {
+    $(`#${this.tableID} .moderno-table-no-data`).remove();
+  }
 }
+
+let __NoDataDefaultTemplate = ("<div class='moderno-table-no-data'><div class='moderno-table-no-data-item'>No Data Available</div></div>");
 
 /// Moderno Table's default configuration
 TableModerno.default_config = {
@@ -867,5 +879,5 @@ TableModerno.default_config = {
   lazyLoad: false,
   lazyLoadTrigger: 75,
   columnFit: "auto",
-
+  noDataTemplate: __NoDataDefaultTemplate
 };
