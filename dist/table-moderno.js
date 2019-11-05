@@ -20,9 +20,12 @@ class TableModerno {
     };
     this.columnConditionalFormatting = {};
     this.customCells = {};
+    this.widthByColumn = [];
+    this.tableExpectedWidth = 0;
 
     //TODO: Inital header width
-    this.setWidthByColumn(this.config.widthByColumn);
+    this.calculateWidthForColumns();
+    this.setColumnWidths();
 
     this.initLoadingIndicator();
     this.initSortingView();
@@ -466,20 +469,22 @@ class TableModerno {
    * Set the widths of existing `.moderno-table-items` elements
    * @param {Array(number)} widths Array of widths of columns from left to right, if not sepecified, default width will be applied
    */
-  setWidthByColumn(widths) {
-    var tableExpectedWidth = -1;
+  calculateWidthForColumns() {
+    this.widthByColumn = [];
+    this.tableExpectedWidth = -1;
+
+    let widths = this.config.widthByColumn;
+    
     if (this.config.columnFit === 'fixed') {
-      var items = $(`#${this.tableID} .moderno-table-header .moderno-table-row:first-child .moderno-table-item`);
+      var items = this.getHeaderColumnDataKeys();
       for (var i = 0; i < items.length; i++) {
         if (i < widths.length) {
-          $(`#${this.tableID} .moderno-table .moderno-table-header .moderno-table-item:nth-child(${i + 1})`).width(widths[i]);
-          $(`#${this.tableID} .moderno-table .moderno-table-body .moderno-table-item:nth-child(${i + 1})`).width(widths[i]);
+          this.widthByColumn.push(widths[i]);
+          this.tableExpectedWidth += widths[i];
         } else {
-          $(`#${this.tableID} .moderno-table .moderno-table-header .moderno-table-item:nth-child(${i + 1})`).width(this.config.defaultWidth);
-          $(`#${this.tableID} .moderno-table .moderno-table-body .moderno-table-item:nth-child(${i + 1})`).width(this.config.defaultWidth);
+          this.widthByColumn.push(this.config.defaultWidth);
+          this.tableExpectedWidth += this.config.defaultWidth;
         }
-        tableExpectedWidth += $(`#${this.tableID} .moderno-table .moderno-table-header .moderno-table-item:nth-child(${i + 1})`).outerWidth() - 1;
-        // -1 because of the `margin-right: -1px` on table item
       }
     } else if (this.config.columnFit === 'auto') {
       let randomRows = this.tableData
@@ -505,10 +510,10 @@ class TableModerno {
       for (let i = 0; i < colKeysLen; i++) {
         colWidths[i] = colWidths[i] / randomRows.length
         colHeaderWidth[i] = Math.max(colWidths[i], headerLengths[i])
-        tableExpectedWidth += colHeaderWidth[i]
+        this.tableExpectedWidth += colHeaderWidth[i]
       }
-      if (tableExpectedWidth < $(`#${this.tableID}`).width() - 31) {
-        let neededSpaceToFill = $(`#${this.tableID}`).width() - 31 - tableExpectedWidth;
+      if (this.tableExpectedWidth < $(`#${this.tableID}`).width() - 31) {
+        let neededSpaceToFill = $(`#${this.tableID}`).width() - 31 - this.tableExpectedWidth;
         let diffIndexes = [];
         let maxWidths = [];
         let diffItemCount = 0;
@@ -537,13 +542,19 @@ class TableModerno {
           });
         }
       }
-      tableExpectedWidth = 0;
+      this.tableExpectedWidth = 0;
       for (let i = 0; i < colKeysLen; i++) {
-        tableExpectedWidth += colHeaderWidth[i]
-        $(`#${this.tableID} [moderno-column=${i}]`).width(colHeaderWidth[i])
+        this.tableExpectedWidth += colHeaderWidth[i]
+        this.widthByColumn.push(colHeaderWidth[i]);
       }
     }
-    $(`#${this.tableID} .moderno-table`).css('width', tableExpectedWidth);
+  }
+
+  setColumnWidths() {
+    this.widthByColumn.forEach((width, index) => {
+      $(`#${this.tableID} [moderno-column="${index}"]`).css('width', width);
+    });
+    $(`#${this.tableID} .moderno-table`).css('width', this.tableExpectedWidth);
   }
 
   /**
@@ -567,7 +578,8 @@ class TableModerno {
     }
     $(`#${this.tableID} .moderno-table-body`).html(dataString);
 
-    this.setWidthByColumn(this.config.widthByColumn);
+    this.calculateWidthForColumns();
+    this.setColumnWidths();
     this.registerStickyColumnsLeft(this.config.stickColumnsLeft);
     this.registerStickyColumnsRight(this.config.stickColumnsRight);
     this.showTooltip();
@@ -595,7 +607,7 @@ class TableModerno {
     }
     $(`#${this.tableID} .moderno-table-body`).append(dataString);
 
-    this.setWidthByColumn(this.config.widthByColumn);
+    this.setColumnWidths();
     this.registerStickyColumnsLeft(this.config.stickColumnsLeft);
     this.registerStickyColumnsRight(this.config.stickColumnsRight);
     this.showTooltip();
@@ -762,8 +774,6 @@ class TableModerno {
               top: itemPos.top,
               left: itemPos.left,
               'min-width': itemWidth > $(`#${this.tableID}`).width() - 20 ? $(`#${this.tableID}`).width() - 20 : itemWidth
-            })
-            .addClass("active");
             })
             .addClass("active");
         }
