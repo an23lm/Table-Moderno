@@ -861,7 +861,7 @@ class TableModerno {
 
   showNoDataAvailable() {
     if (this.tableData.length > 0) return false;
-    $(`#${this.tableID}`).append(this.config.noDataTemplate);
+    $(`#${this.tableID}`).html(this.config.noDataTemplate);
     $(`#${this.tableID} .moderno-table-no-data`).css({ 'width':  $(`#${this.tableID}`).width() - 10 })
     return true;
   }
