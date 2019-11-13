@@ -591,6 +591,7 @@ class TableModerno {
    * @param {Object} data New data to load the table with
    */
   appendData(data, keepSort = false) {
+    let existingDataLength = this.tableData.length;
     this.prevTableData = [...this.prevTableData, ...data];
     this.tableData = [...this.tableData, ...data];
 
@@ -602,7 +603,7 @@ class TableModerno {
     var clipClass = this.config.singleLineRows ? "clip" : "no-clip";
 
     var dataString = "";
-    for (var i = 0; i < data.length; i++) {
+    for (var i = existingDataLength; i < this.tableData.length; i++) {
       dataString += this.getRowString(i, colKeys, clipClass);
     }
     $(`#${this.tableID} .moderno-table-body`).append(dataString);
