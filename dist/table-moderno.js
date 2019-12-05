@@ -566,7 +566,9 @@ class TableModerno {
     this.tableData = [...data];
 
     if (this.showNoDataAvailable()) return;
+
     this.hideNoDataAvailable();
+    
     if (!keepSort) this.resetSortList();
 
     var colKeys = this.getHeaderColumnDataKeys();
@@ -863,6 +865,7 @@ class TableModerno {
   showNoDataAvailable() {
     if (this.tableData.length > 0) return false;
     if ($('.moderno-table-no-data').length > 0) return true;
+    $(`#${this.tableID} .moderno-table-body`).html('');
     $(`#${this.tableID}`).append(this.config.noDataTemplate);
     $(`#${this.tableID} .moderno-table-no-data`).css({ 'width':  $(`#${this.tableID}`).width() - 10 })
     return true;
