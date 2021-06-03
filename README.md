@@ -16,7 +16,7 @@ Clone the repository and import `table-moderno.js` and `table-moderno.css` into 
 ```html
 <!-- Always get the latest version -->
 <!-- Not recommended for production sites! -->
-<script src="https://cdn.jsdelivr.net/gh/an23lm/table-moderno/dist/able-moderno.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/an23lm/table-moderno/dist/table-moderno.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/an23lm/table-moderno/dist/table-moderno.css">
 
 <!-- Get minor updates and patch fixes within a major version -->
