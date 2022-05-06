@@ -2,6 +2,8 @@
 
 A simple, powerful, and modern implementation of tables for the web.
 
+### [Demo](https://an23lm.github.io/Table-Moderno/)
+
 ### [Releases](https://github.com/an23lm/Table-Moderno/releases/)
 
 ## Installation
