@@ -8,120 +8,172 @@
 
 <!DOCTYPE html>
 <html>
-<head>
-	<title></title>
-	<link rel="stylesheet" type="text/css" href="../dist/table-moderno.css">
-	<script
-  		src="https://code.jquery.com/jquery-3.3.1.min.js"
-  		integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-  		crossorigin="anonymous"></script>
-	<script type="text/javascript" src="../dist/table-moderno.js"></script>
-	<style>
-		.cusid {
-			height: 15px;
-			width: 15px;
-		}
-		.cusid.hide {
-			display: none;
-		}
-		.cusid.show {
-			display: inline;
-		}
-		#table1 {
-			width: 100%;
-		}
-	</style>
-</head>
-<body>
-	<button onclick="openSort();">Open Sort</button>
-	<button onclick="reloadTable();">Reload Table</button>
-	<div class="moderno-table-wrapper" id="table1">
-		<div class="moderno-table">
-			<div class="moderno-table-header">
-				<div class="moderno-table-row">
-					<div class="moderno-table-item" data-key="id" moderno-column=0><span style="font-size: 0.6em; font-weight: 800">DR</span>Company ID</div>
-					<div class="moderno-table-item" data-key="name" moderno-column=1>Name</div>
-					<div class="moderno-table-item" data-key="mail" moderno-column=2>Email</div>
-					<div class="moderno-table-item" data-key="ph" moderno-column=3>Phone</div>
-					<div class="moderno-table-item" data-key="prof" moderno-column=4>Profession</div>
-					<div class="moderno-table-item" data-key="hobbs" moderno-column=5>Hobbies</div>
+	<head>
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="../dist/table-moderno.css" />
+		<script
+			src="https://code.jquery.com/jquery-3.3.1.min.js"
+			integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+			crossorigin="anonymous"
+		></script>
+		<script type="text/javascript" src="./data.js">
+			var data = data
+		</script>
+		<script src="https://cdn.jsdelivr.net/gh/an23lm/table-moderno/dist/table-moderno.js"></script>
+		<style>
+			.cusid {
+				height: 15px;
+				width: 15px;
+			}
+			.cusid.hide {
+				display: none;
+			}
+			.cusid.show {
+				display: inline;
+			}
+			#table1 {
+				width: 100%;
+			}
+		</style>
+	</head>
+	<body>
+		<button onclick="openSort();">Open Sort</button>
+		<button onclick="reloadTable();">Reload Table</button>
+		<div class="moderno-table-wrapper" id="table1">
+			<div class="moderno-table">
+				<div class="moderno-table-header">
+					<div class="moderno-table-row">
+						<div
+							class="moderno-table-item"
+							data-key="first-name"
+							moderno-column="0"
+						>
+							First Name
+						</div>
+						<div
+							class="moderno-table-item"
+							data-key="last-name"
+							moderno-column="1"
+						>
+							Last Name
+						</div>
+						<div class="moderno-table-item" data-key="Email" moderno-column="2">
+							Email
+						</div>
+						<div class="moderno-table-item" data-key="Phone" moderno-column="3">
+							Phone
+						</div>
+						<div
+							class="moderno-table-item"
+							data-key="Occupation"
+							moderno-column="4"
+						>
+							Profession
+						</div>
+					</div>
 				</div>
-			</div>
-			<div class="moderno-table-body">
-
+				<div class="moderno-table-body"></div>
 			</div>
 		</div>
-	</div>
-	<script type="text/javascript">
-		const config = {
-			scrollBarType: 'always',
-			widthByColumn: ['16%', '16%', '16%', '16%', '16%', '16%'],
-			stickColumnsLeft: [1],
-			stickColumnsRight: [4],
-			stickHeader: true,
-			singleLineRows: true,
-			highlightBodyColor : false,
-			highlightHeaderColor: false,
-			tooltip : true,
-			convertToLocaleString: true,
-			locale: 'en-IN',
-			maximumFractionDigits: 2,
-			lazyLoad: true,
-			columnFit: 'fixed'
-		};
-		var moderno = new TableModerno("table1", config);
-		var ph = 12345
-		var newData = [];
-		const obj = {id: 1, name: 'SquarePants', mail: 'squrepants@subway.com', ph: ph, prof: 'pineapple pineapple', hobbs: 'ff?'};
-		newData.push({id: 1, name: 'SquarePants', mail: 'squrepants@subway.com squrepants@subway.com squrepants@subway.com squrepants@subway.com squrepants@subway.com squrepants@subway.com', ph: ++ph, hobbs: 'ff?'})
-		newData.push({id: 1, name: 'SquarePants', mail: 'squrepants@subway.com squrepants@subway.com', ph: ++ph, prof: 'pine', hobbs: 'ff?'})
-		for (var i = 0; i < 100; i++) {
-			newData.push(obj);
-		}
+		<script type="text/javascript">
+			const config = {
+				scrollBarType: "always",
+				widthByColumn: ["20%", "20%", "20%", "20%"],
+				stickColumnsLeft: [1],
+				stickColumnsRight: [4],
+				stickHeader: true,
+				singleLineRows: true,
+				highlightBodyColor: false,
+				highlightHeaderColor: false,
+				tooltip: true,
+				convertToLocaleString: true,
+				locale: "en-IN",
+				maximumFractionDigits: 2,
+				lazyLoad: true,
+				columnFit: "fixed",
+			};
+			var moderno = new TableModerno("table1", config);
+			// var ph = 12345;
+			// var newData = [];
+			// const obj = {
+			// 	id: 1,
+			// 	name: "SquarePants",
+			// 	mail: "squrepants@subway.com",
+			// 	ph: ph,
+			// 	prof: "pineapple pineapple",
+			// 	hobbs: "ff?",
+			// };
+			// newData.push({
+			// 	id: 1,
+			// 	name: "SquarePants",
+			// 	mail: "squrepants@subway.com squrepants@subway.com squrepants@subway.com squrepants@subway.com squrepants@subway.com squrepants@subway.com",
+			// 	ph: ++ph,
+			// 	hobbs: "ff?",
+			// });
+			// newData.push({
+			// 	id: 1,
+			// 	name: "SquarePants",
+			// 	mail: "squrepants@subway.com squrepants@subway.com",
+			// 	ph: ++ph,
+			// 	prof: "pine",
+			// 	hobbs: "ff?",
+			// });
+			// for (var i = 0; i < 100; i++) {
+			// 	newData.push(obj);
+			// }
 
-		moderno.registerLazyLoadTriggerCallback((completion) => {
-			moderno.appendData(newData)
+			moderno.registerLazyLoadTriggerCallback((completion) => {
+				moderno.appendData(data);
+				setTimeout(() => {
+					completion();
+				}, 5000);
+			});
+
+			moderno.registerConditionOnColumn(
+				"cond1",
+				function (row) {
+					return row.prof != undefined && row.prof.length > 5 ? true : false;
+				},
+				"red!important",
+				"prof"
+			);
+
+			moderno.registerCustomCellGenerator(function (value) {
+				if (value == undefined) {
+					value = "-";
+				}
+				return `<img class='cusid hide' src='../dist/static/sort.svg'/>${value}`;
+			}, "id");
+
+			moderno.registerConsequence(
+				(rowindex, colKeys, conditions, cellskeletions) => {
+					if (conditions.cond1) {
+						cellskeletions.id.cellgenerator = (value) => {
+							return `<img class='cusid show' src='../dist/static/sort.svg'/>${value}`;
+						};
+					}
+					return cellskeletions;
+				}
+			);
+
+			moderno.showLoadingIndicator();
+			// moderno.setValueAtRowWithHeaderKey(20, 4, 'id');
+			// moderno.setTextColorAtRowWithHeaderKey("red", 0, "id");
+			// moderno.setCssAtRowWithHeaderKey("background", "Black", 0 , "id");
+
 			setTimeout(() => {
-				completion();
-			}, 5000)
-		})
+				moderno.reloadTableWithData(data);
+				moderno.hideLoadingIndicator();
+				// moderno.setWidthByColumn([10])
+			}, 500);
 
-		moderno.registerConditionOnColumn('cond1', function(row) {
-			return row.prof != undefined && row.prof.length > 5 ? true : false;
-		}, 'red!important', 'prof');
-	
-		moderno.registerCustomCellGenerator(function(value) {
-			if (value == undefined) {
-				value = '-';
+			function openSort() {
+				moderno.openSortView();
 			}
-			return `<img class='cusid hide' src='../dist/static/sort.svg'/>${value}`;
-		}, 'id')
 
-		moderno.registerConsequence((rowindex, colKeys, conditions, cellskeletions) => {
-			if (conditions.cond1) {
-				cellskeletions.id.cellgenerator = (value) => { return `<img class='cusid show' src='../dist/static/sort.svg'/>${value}`; }
+			function reloadTable() {
+				moderno.reloadTableWithData(data);
 			}
-			return cellskeletions;
-		})
-
-		moderno.showLoadingIndicator();
-		// moderno.setValueAtRowWithHeaderKey(20, 4, 'id');
-		// moderno.setTextColorAtRowWithHeaderKey("red", 0, "id");
-		// moderno.setCssAtRowWithHeaderKey("background", "Black", 0 , "id");
-
-		setTimeout(() => {
-			moderno.reloadTableWithData(newData);
-			moderno.hideLoadingIndicator();
-			// moderno.setWidthByColumn([10])
-		}, 500);
-
-		function openSort() {
-			moderno.openSortView();
-		}
-
-		function reloadTable() {
-			moderno.reloadTableWithData(newData);
-		}
-	</script>
-</body>
+		</script>
+	</body>
 </html>
