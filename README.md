@@ -3,7 +3,7 @@
 A simple, powerful, and modern implementation of tables for the web.
 
 ### [Demo](https://an23lm.github.io/Table-Moderno/)
-<img width="1680" alt="Screenshot 2022-05-06 at 20 37 15@2x" src="https://user-images.githubusercontent.com/5507600/167161309-1bdbe776-5a58-4b12-b348-83a7c4c7f7b0.png">
+[<img width="1680" alt="Screenshot 2022-05-06 at 20 37 15@2x" src="https://user-images.githubusercontent.com/5507600/167161309-1bdbe776-5a58-4b12-b348-83a7c4c7f7b0.png">](https://an23lm.github.io/Table-Moderno/)
 
 ### [Releases](https://github.com/an23lm/Table-Moderno/releases/)
 
